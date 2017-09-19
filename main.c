@@ -1,9 +1,15 @@
 int main(void) {
+
 	initMe();
+
 	while(isRunning()==1){
-		printHashTableTest();	
-	 printf("%d\n", yylex());
+
+		//debud
+		printf("get %d\n", yylex());
+		//printf("number of lines: %d\n", getLineNumber());
+		//printf("::::: %d\n", ht_get( hashtable, "eduardo" ));
+			
+	}
 		
-}	 
- return 0;
+	return 0;
 }

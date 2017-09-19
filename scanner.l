@@ -24,12 +24,10 @@ int ({digit})+
 	hashtable_t *hashtable;
 %}
 
-
 %%
 
-\EOF {printf("EOF\n"); running=0;}
-
 \n	lineCount++;
+<<EOF>> {/*printf("EOF\n");*/ running=0;}
 
 byte	return KW_BYTE;
 short	return KW_SHORT;
@@ -62,9 +60,8 @@ return	return KW_RETURN;
 \&&	return OPERATOR_AND;
 \|\|	return OPERATOR_OR;
 
-(\\\\)(.)*(\n)	{printf("simple comment"); break;}
-(\\*)(.)*(\*\\)	{printf("mult comment"); break;}
-
+(\/\/)(.)*(\n)	{/*printf("simple comment"); */lineCount++; break;}
+(\/\*)(.)*(\*\/)	{/*printf("mult comment");*/ break;}
 
 .	return TOKEN_ERROR;
 
@@ -82,18 +79,13 @@ int getLineNumber(void) {
 }
 
 int yywrap(void) {
- return 1;
+
+	return 1;
 } 
-
-void printHashTableTest() {
-
-	ht_get( hashtable, "key");
-}
 
 void initMe(void) {
 	
 	hashtable = ht_create( 65536 );
-	printf("hash init\n");
 	running=1;
 }
 
