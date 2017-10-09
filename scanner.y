@@ -59,7 +59,8 @@ vardec:
 
 expr:
     LIT_INTEGER //{ $$ = con($1); }
-    | TK_IDENTIFIER  //{ $$ = id($1); }
+    | funcall
+    | TK_IDENTIFIER at_array //{ $$ = id($1); }
     | '-' expr //%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
     | expr '+' expr //{ $$ = opr('+', 2, $1, $3); }
     | expr '-' expr //{ $$ = opr('-', 2, $1, $3); }
@@ -73,6 +74,15 @@ expr:
     | expr OPERATOR_EQ expr  //{ $$ = opr(EQ, 2, $1, $3); }
     | '(' expr ')'  //{ $$ = $2; }
     ;
+
+at_array:
+	"[" expr "]"
+	|
+	;
+
+funcall:
+	TK_IDENTIFIER "(" paramlist ")"
+	;
 
 cmd:
 	TK_IDENTIFIER "=" expr
@@ -145,6 +155,20 @@ arg:
 
 optarg:
 	"," arg optarg
+	|
+	;
+
+paramlist:
+	param optparam
+	|
+	;
+
+param:
+	expr
+	;
+
+optparam:
+	"," param optparam
 	|
 	;
 
