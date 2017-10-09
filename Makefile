@@ -8,11 +8,15 @@
  #
  #
 
-etapa1: lex.yy.c
-	gcc -o etapa1 lex.yy.c
+
+etapa1:etapa2 lex.yy.c
+	gcc -o etapa2 lex.yy.c y.tab.c
+
+etapa2: scanner.y
+	yacc -d scanner.y
 
 lex.yy.c: scanner.l
 	lex scanner.l
 
 clean:
-	rm lex.yy.c etapa1
+	rm lex.yy.c etapa2

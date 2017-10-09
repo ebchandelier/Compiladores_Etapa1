@@ -3,7 +3,7 @@ Bruno Loureiro*/
 
 digit [0-9]
 letter [A-Za-z] 
-identifier ({letter}|_)({letter}|{digit}|\ |_)*({letter}|{digit}|_) 
+identifier ({letter}|_)(({letter}|{digit}|\ |_)*({letter}|{digit}|_)+|)
 int ({digit})+
 
 
@@ -27,7 +27,7 @@ int ({digit})+
 %%
 
 \n	lineCount++;
-<<EOF>> {/*printf("EOF\n");*/ running=0;}
+<<EOF>> {printf("EOF\n"); running=0; yyterminate();}
 
 byte	return KW_BYTE;
 short	return KW_SHORT;
@@ -46,11 +46,11 @@ return	return KW_RETURN;
 {identifier}	{	ht_set( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}		
 
 ({digit})+	{ht_set( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
-({digit})+(.)({digit})+	{ht_set( hashtable, yytext, LIT_REAL); return LIT_REAL;}
+({digit})+(".")({digit})+	{ht_set( hashtable, yytext, LIT_REAL); return LIT_REAL;}
 (\')(.)(\')	{ht_set( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
-(\")(.)*(\")	{ht_set( hashtable, yytext, LIT_STRING);return LIT_STRING;}
+(\")([^\"]|(\\\"))*(\")	{ht_set( hashtable, yytext, LIT_STRING);return LIT_STRING;}
 
-
+[ \t]   // Ignore whitespace, tab
 [\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\!\&\$\#]	return *yytext;
 
 \<=	return OPERATOR_LE;
@@ -61,7 +61,7 @@ return	return KW_RETURN;
 \|\|	return OPERATOR_OR;
 
 (\/\/)(.)*(\n)	{/*printf("simple comment"); */lineCount++; break;}
-(\/\*)(.)*(\*\/)	{/*printf("mult comment");*/ break;}
+(\/\*)(.|\n)*(\*\/)	{/*printf("mult comment");*/ break;}
 
 .	return TOKEN_ERROR;
 
