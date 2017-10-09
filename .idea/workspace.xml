@@ -10,13 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0429df86-8a59-44ca-a3bb-74bce6899011" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/etapa1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/hash.c" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lex.yy.c" afterPath="$PROJECT_DIR$/lex.yy.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.c" afterPath="$PROJECT_DIR$/main.c" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanner.l" afterPath="$PROJECT_DIR$/scanner.l" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lex.yy.c" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanner.y" afterPath="$PROJECT_DIR$/scanner.y" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/y.output" afterPath="$PROJECT_DIR$/y.output" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/y.tab.c" afterPath="$PROJECT_DIR$/y.tab.c" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,8 +31,8 @@
       <file leaf-file-name="scanner.y" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scanner.y">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="40" column="1" lean-forward="false" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
+            <state relative-caret-position="216">
+              <caret line="49" column="2" lean-forward="false" selection-start-line="49" selection-start-column="2" selection-end-line="49" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -43,8 +41,8 @@
       <file leaf-file-name="y.output" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/y.output">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="569" column="24" lean-forward="true" selection-start-line="569" selection-start-column="24" selection-end-line="569" selection-end-column="24" />
+            <state relative-caret-position="90">
+              <caret line="559" column="8" lean-forward="true" selection-start-line="559" selection-start-column="8" selection-end-line="559" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -105,6 +103,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="-4" />
+    <option name="width" value="1366" />
+    <option name="height" value="772" />
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -156,7 +159,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8707000" />
+    <option name="totallyTimeSpent" value="10378000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="1366" height="772" extended-state="6" />
@@ -384,16 +387,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/y.output">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="569" column="24" lean-forward="true" selection-start-line="569" selection-start-column="24" selection-end-line="569" selection-end-column="24" />
+        <state relative-caret-position="90">
+          <caret line="559" column="8" lean-forward="true" selection-start-line="559" selection-start-column="8" selection-end-line="559" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scanner.y">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="40" column="1" lean-forward="false" selection-start-line="40" selection-start-column="1" selection-end-line="40" selection-end-column="1" />
+        <state relative-caret-position="216">
+          <caret line="49" column="2" lean-forward="false" selection-start-line="49" selection-start-column="2" selection-end-line="49" selection-end-column="2" />
           <folding />
         </state>
       </provider>

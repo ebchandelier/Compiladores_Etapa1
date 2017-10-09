@@ -6,67 +6,66 @@
 
    4  vardec : TK_IDENTIFIER ':' type '=' value ';'
    5         | TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' valuelist ';'
-   6         | TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' ';'
 
-   7  expr : LIT_INTEGER
-   8       | TK_IDENTIFIER
-   9       | '-' expr
-  10       | expr '+' expr
-  11       | expr '-' expr
-  12       | expr '*' expr
-  13       | expr '/' expr
-  14       | expr '<' expr
-  15       | expr '>' expr
-  16       | expr OPERATOR_GE expr
-  17       | expr OPERATOR_LE expr
-  18       | expr OPERATOR_NE expr
-  19       | expr OPERATOR_EQ expr
-  20       | '(' expr ')'
+   6  expr : LIT_INTEGER
+   7       | TK_IDENTIFIER
+   8       | '-' expr
+   9       | expr '+' expr
+  10       | expr '-' expr
+  11       | expr '*' expr
+  12       | expr '/' expr
+  13       | expr '<' expr
+  14       | expr '>' expr
+  15       | expr OPERATOR_GE expr
+  16       | expr OPERATOR_LE expr
+  17       | expr OPERATOR_NE expr
+  18       | expr OPERATOR_EQ expr
+  19       | '(' expr ')'
 
-  21  cmd : KW_READ
-  22      | KW_PRINT
-  23      | KW_RETURN
-  24      | KW_IF '(' expr ')' KW_THEN cmd elseCmd
-  25      | KW_WHILE '(' expr ')' cmd
-  26      | cmdblock
+  20  cmd : KW_READ
+  21      | KW_PRINT
+  22      | KW_RETURN
+  23      | KW_IF '(' expr ')' KW_THEN cmd elseCmd
+  24      | KW_WHILE '(' expr ')' cmd
+  25      | cmdblock
 
-  27  elseCmd : KW_ELSE cmd
-  28          |
+  26  elseCmd : KW_ELSE cmd
+  27          |
 
-  29  type : "byte"
-  30       | "short"
-  31       | "long"
-  32       | "float"
-  33       | "double"
+  28  type : "byte"
+  29       | "short"
+  30       | "long"
+  31       | "float"
+  32       | "double"
 
-  34  value : LIT_INTEGER
-  35        | LIT_REAL
-  36        | LIT_CHAR
+  33  value : LIT_INTEGER
+  34        | LIT_REAL
+  35        | LIT_CHAR
 
-  37  valuelist : value valuelist
-  38            |
+  36  valuelist : value valuelist
+  37            |
 
-  39  fundec : funheader funbody
+  38  fundec : funheader funbody
 
-  40  funheader : '(' type ')' TK_IDENTIFIER '(' arglist ')'
+  39  funheader : '(' type ')' TK_IDENTIFIER '(' arglist ')'
 
-  41  arglist : arg optarg
-  42          |
+  40  arglist : arg optarg
+  41          |
 
-  43  arg : TK_IDENTIFIER ':' type
+  42  arg : TK_IDENTIFIER ':' type
 
-  44  optarg : ',' arg optarg
-  45         |
+  43  optarg : ',' arg optarg
+  44         |
 
-  46  funbody : cmdblock
+  45  funbody : cmdblock
 
-  47  cmdblock : '{' cmdlist '}'
+  46  cmdblock : '{' cmdlist '}'
 
-  48  cmdlist : cmd optcmd
-  49          |
+  47  cmdlist : cmd optcmd
+  48          |
 
-  50  optcmd : ';' cmd optcmd
-  51         |
+  49  optcmd : ';' cmd optcmd
+  50         |
 
 state 0
 	$accept : . program $end  (0)
@@ -85,14 +84,13 @@ state 0
 state 1
 	vardec : TK_IDENTIFIER . ':' type '=' value ';'  (4)
 	vardec : TK_IDENTIFIER . ':' type '[' LIT_INTEGER ']' valuelist ';'  (5)
-	vardec : TK_IDENTIFIER . ':' type '[' LIT_INTEGER ']' ';'  (6)
 
 	':'  shift 7
 	.  error
 
 
 state 2
-	funheader : '(' . type ')' TK_IDENTIFIER '(' arglist ')'  (40)
+	funheader : '(' . type ')' TK_IDENTIFIER '(' arglist ')'  (39)
 
 	"byte"  shift 8
 	"short"  shift 9
@@ -131,7 +129,7 @@ state 5
 
 
 state 6
-	fundec : funheader . funbody  (39)
+	fundec : funheader . funbody  (38)
 
 	'{'  shift 15
 	.  error
@@ -143,7 +141,6 @@ state 6
 state 7
 	vardec : TK_IDENTIFIER ':' . type '=' value ';'  (4)
 	vardec : TK_IDENTIFIER ':' . type '[' LIT_INTEGER ']' valuelist ';'  (5)
-	vardec : TK_IDENTIFIER ':' . type '[' LIT_INTEGER ']' ';'  (6)
 
 	"byte"  shift 8
 	"short"  shift 9
@@ -156,37 +153,37 @@ state 7
 
 
 state 8
-	type : "byte" .  (29)
+	type : "byte" .  (28)
+
+	.  reduce 28
+
+
+state 9
+	type : "short" .  (29)
 
 	.  reduce 29
 
 
-state 9
-	type : "short" .  (30)
+state 10
+	type : "long" .  (30)
 
 	.  reduce 30
 
 
-state 10
-	type : "long" .  (31)
+state 11
+	type : "float" .  (31)
 
 	.  reduce 31
 
 
-state 11
-	type : "float" .  (32)
+state 12
+	type : "double" .  (32)
 
 	.  reduce 32
 
 
-state 12
-	type : "double" .  (33)
-
-	.  reduce 33
-
-
 state 13
-	funheader : '(' type . ')' TK_IDENTIFIER '(' arglist ')'  (40)
+	funheader : '(' type . ')' TK_IDENTIFIER '(' arglist ')'  (39)
 
 	')'  shift 19
 	.  error
@@ -199,8 +196,8 @@ state 14
 
 
 state 15
-	cmdblock : '{' . cmdlist '}'  (47)
-	cmdlist : .  (49)
+	cmdblock : '{' . cmdlist '}'  (46)
+	cmdlist : .  (48)
 
 	KW_IF  shift 20
 	KW_WHILE  shift 21
@@ -208,7 +205,7 @@ state 15
 	KW_RETURN  shift 23
 	KW_PRINT  shift 24
 	'{'  shift 15
-	'}'  reduce 49
+	'}'  reduce 48
 
 	cmd  goto 25
 	cmdblock  goto 26
@@ -216,21 +213,20 @@ state 15
 
 
 state 16
-	funbody : cmdblock .  (46)
+	funbody : cmdblock .  (45)
 
-	.  reduce 46
+	.  reduce 45
 
 
 state 17
-	fundec : funheader funbody .  (39)
+	fundec : funheader funbody .  (38)
 
-	.  reduce 39
+	.  reduce 38
 
 
 state 18
 	vardec : TK_IDENTIFIER ':' type . '=' value ';'  (4)
 	vardec : TK_IDENTIFIER ':' type . '[' LIT_INTEGER ']' valuelist ';'  (5)
-	vardec : TK_IDENTIFIER ':' type . '[' LIT_INTEGER ']' ';'  (6)
 
 	'='  shift 28
 	'['  shift 29
@@ -238,62 +234,62 @@ state 18
 
 
 state 19
-	funheader : '(' type ')' . TK_IDENTIFIER '(' arglist ')'  (40)
+	funheader : '(' type ')' . TK_IDENTIFIER '(' arglist ')'  (39)
 
 	TK_IDENTIFIER  shift 30
 	.  error
 
 
 state 20
-	cmd : KW_IF . '(' expr ')' KW_THEN cmd elseCmd  (24)
+	cmd : KW_IF . '(' expr ')' KW_THEN cmd elseCmd  (23)
 
 	'('  shift 31
 	.  error
 
 
 state 21
-	cmd : KW_WHILE . '(' expr ')' cmd  (25)
+	cmd : KW_WHILE . '(' expr ')' cmd  (24)
 
 	'('  shift 32
 	.  error
 
 
 state 22
-	cmd : KW_READ .  (21)
+	cmd : KW_READ .  (20)
 
-	.  reduce 21
+	.  reduce 20
 
 
 state 23
-	cmd : KW_RETURN .  (23)
-
-	.  reduce 23
-
-
-state 24
-	cmd : KW_PRINT .  (22)
+	cmd : KW_RETURN .  (22)
 
 	.  reduce 22
 
 
+state 24
+	cmd : KW_PRINT .  (21)
+
+	.  reduce 21
+
+
 state 25
-	cmdlist : cmd . optcmd  (48)
-	optcmd : .  (51)
+	cmdlist : cmd . optcmd  (47)
+	optcmd : .  (50)
 
 	';'  shift 33
-	'}'  reduce 51
+	'}'  reduce 50
 
 	optcmd  goto 34
 
 
 state 26
-	cmd : cmdblock .  (26)
+	cmd : cmdblock .  (25)
 
-	.  reduce 26
+	.  reduce 25
 
 
 state 27
-	cmdblock : '{' cmdlist . '}'  (47)
+	cmdblock : '{' cmdlist . '}'  (46)
 
 	'}'  shift 35
 	.  error
@@ -312,21 +308,20 @@ state 28
 
 state 29
 	vardec : TK_IDENTIFIER ':' type '[' . LIT_INTEGER ']' valuelist ';'  (5)
-	vardec : TK_IDENTIFIER ':' type '[' . LIT_INTEGER ']' ';'  (6)
 
 	LIT_INTEGER  shift 40
 	.  error
 
 
 state 30
-	funheader : '(' type ')' TK_IDENTIFIER . '(' arglist ')'  (40)
+	funheader : '(' type ')' TK_IDENTIFIER . '(' arglist ')'  (39)
 
 	'('  shift 41
 	.  error
 
 
 state 31
-	cmd : KW_IF '(' . expr ')' KW_THEN cmd elseCmd  (24)
+	cmd : KW_IF '(' . expr ')' KW_THEN cmd elseCmd  (23)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -338,7 +333,7 @@ state 31
 
 
 state 32
-	cmd : KW_WHILE '(' . expr ')' cmd  (25)
+	cmd : KW_WHILE '(' . expr ')' cmd  (24)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -350,7 +345,7 @@ state 32
 
 
 state 33
-	optcmd : ';' . cmd optcmd  (50)
+	optcmd : ';' . cmd optcmd  (49)
 
 	KW_IF  shift 20
 	KW_WHILE  shift 21
@@ -365,33 +360,33 @@ state 33
 
 
 state 34
-	cmdlist : cmd optcmd .  (48)
-
-	.  reduce 48
-
-
-state 35
-	cmdblock : '{' cmdlist '}' .  (47)
+	cmdlist : cmd optcmd .  (47)
 
 	.  reduce 47
 
 
+state 35
+	cmdblock : '{' cmdlist '}' .  (46)
+
+	.  reduce 46
+
+
 state 36
-	value : LIT_INTEGER .  (34)
+	value : LIT_INTEGER .  (33)
+
+	.  reduce 33
+
+
+state 37
+	value : LIT_REAL .  (34)
 
 	.  reduce 34
 
 
-state 37
-	value : LIT_REAL .  (35)
+state 38
+	value : LIT_CHAR .  (35)
 
 	.  reduce 35
-
-
-state 38
-	value : LIT_CHAR .  (36)
-
-	.  reduce 36
 
 
 state 39
@@ -403,37 +398,36 @@ state 39
 
 state 40
 	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER . ']' valuelist ';'  (5)
-	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER . ']' ';'  (6)
 
 	']'  shift 50
 	.  error
 
 
 state 41
-	funheader : '(' type ')' TK_IDENTIFIER '(' . arglist ')'  (40)
-	arglist : .  (42)
+	funheader : '(' type ')' TK_IDENTIFIER '(' . arglist ')'  (39)
+	arglist : .  (41)
 
 	TK_IDENTIFIER  shift 51
-	')'  reduce 42
+	')'  reduce 41
 
 	arglist  goto 52
 	arg  goto 53
 
 
 state 42
-	expr : TK_IDENTIFIER .  (8)
-
-	.  reduce 8
-
-
-state 43
-	expr : LIT_INTEGER .  (7)
+	expr : TK_IDENTIFIER .  (7)
 
 	.  reduce 7
 
 
+state 43
+	expr : LIT_INTEGER .  (6)
+
+	.  reduce 6
+
+
 state 44
-	expr : '-' . expr  (9)
+	expr : '-' . expr  (8)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -445,7 +439,7 @@ state 44
 
 
 state 45
-	expr : '(' . expr ')'  (20)
+	expr : '(' . expr ')'  (19)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -457,17 +451,17 @@ state 45
 
 
 state 46
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-	cmd : KW_IF '(' expr . ')' KW_THEN cmd elseCmd  (24)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+	cmd : KW_IF '(' expr . ')' KW_THEN cmd elseCmd  (23)
 
 	OPERATOR_LE  shift 56
 	OPERATOR_GE  shift 57
@@ -484,17 +478,17 @@ state 46
 
 
 state 47
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-	cmd : KW_WHILE '(' expr . ')' cmd  (25)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+	cmd : KW_WHILE '(' expr . ')' cmd  (24)
 
 	OPERATOR_LE  shift 56
 	OPERATOR_GE  shift 57
@@ -511,11 +505,11 @@ state 47
 
 
 state 48
-	optcmd : ';' cmd . optcmd  (50)
-	optcmd : .  (51)
+	optcmd : ';' cmd . optcmd  (49)
+	optcmd : .  (50)
 
 	';'  shift 33
-	'}'  reduce 51
+	'}'  reduce 50
 
 	optcmd  goto 68
 
@@ -526,87 +520,81 @@ state 49
 	.  reduce 4
 
 
-50: shift/reduce conflict (shift 69, reduce 38) on ';'
 state 50
 	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' . valuelist ';'  (5)
-	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' . ';'  (6)
-	valuelist : .  (38)
+	valuelist : .  (37)
 
 	LIT_INTEGER  shift 36
 	LIT_REAL  shift 37
 	LIT_CHAR  shift 38
-	';'  shift 69
+	';'  reduce 37
 
-	value  goto 70
-	valuelist  goto 71
+	value  goto 69
+	valuelist  goto 70
 
 
 state 51
-	arg : TK_IDENTIFIER . ':' type  (43)
+	arg : TK_IDENTIFIER . ':' type  (42)
 
-	':'  shift 72
+	':'  shift 71
 	.  error
 
 
 state 52
-	funheader : '(' type ')' TK_IDENTIFIER '(' arglist . ')'  (40)
+	funheader : '(' type ')' TK_IDENTIFIER '(' arglist . ')'  (39)
 
-	')'  shift 73
+	')'  shift 72
 	.  error
 
 
 state 53
-	arglist : arg . optarg  (41)
-	optarg : .  (45)
+	arglist : arg . optarg  (40)
+	optarg : .  (44)
 
-	','  shift 74
-	')'  reduce 45
+	','  shift 73
+	')'  reduce 44
 
-	optarg  goto 75
+	optarg  goto 74
 
 
-54: shift/reduce conflict (shift 56, reduce 9) on OPERATOR_LE
-54: shift/reduce conflict (shift 57, reduce 9) on OPERATOR_GE
-54: shift/reduce conflict (shift 58, reduce 9) on OPERATOR_EQ
-54: shift/reduce conflict (shift 59, reduce 9) on OPERATOR_NE
 state 54
-	expr : '-' expr .  (9)
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
+	expr : '-' expr .  (8)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
 
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
 	'*'  shift 64
 	'/'  shift 65
-	'<'  reduce 9
-	'>'  reduce 9
-	'+'  reduce 9
-	'-'  reduce 9
-	')'  reduce 9
+	OPERATOR_LE  reduce 8
+	OPERATOR_GE  reduce 8
+	OPERATOR_EQ  reduce 8
+	OPERATOR_NE  reduce 8
+	'<'  reduce 8
+	'>'  reduce 8
+	'+'  reduce 8
+	'-'  reduce 8
+	')'  reduce 8
 
 
 state 55
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-	expr : '(' expr . ')'  (20)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+	expr : '(' expr . ')'  (19)
 
 	OPERATOR_LE  shift 56
 	OPERATOR_GE  shift 57
@@ -618,12 +606,24 @@ state 55
 	'-'  shift 63
 	'*'  shift 64
 	'/'  shift 65
-	')'  shift 76
+	')'  shift 75
 	.  error
 
 
 state 56
-	expr : expr OPERATOR_LE . expr  (17)
+	expr : expr OPERATOR_LE . expr  (16)
+
+	TK_IDENTIFIER  shift 42
+	LIT_INTEGER  shift 43
+	'-'  shift 44
+	'('  shift 45
+	.  error
+
+	expr  goto 76
+
+
+state 57
+	expr : expr OPERATOR_GE . expr  (15)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -634,8 +634,8 @@ state 56
 	expr  goto 77
 
 
-state 57
-	expr : expr OPERATOR_GE . expr  (16)
+state 58
+	expr : expr OPERATOR_EQ . expr  (18)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -646,8 +646,8 @@ state 57
 	expr  goto 78
 
 
-state 58
-	expr : expr OPERATOR_EQ . expr  (19)
+state 59
+	expr : expr OPERATOR_NE . expr  (17)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -658,8 +658,8 @@ state 58
 	expr  goto 79
 
 
-state 59
-	expr : expr OPERATOR_NE . expr  (18)
+state 60
+	expr : expr '<' . expr  (13)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -670,8 +670,8 @@ state 59
 	expr  goto 80
 
 
-state 60
-	expr : expr '<' . expr  (14)
+state 61
+	expr : expr '>' . expr  (14)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -682,8 +682,8 @@ state 60
 	expr  goto 81
 
 
-state 61
-	expr : expr '>' . expr  (15)
+state 62
+	expr : expr '+' . expr  (9)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -694,8 +694,8 @@ state 61
 	expr  goto 82
 
 
-state 62
-	expr : expr '+' . expr  (10)
+state 63
+	expr : expr '-' . expr  (10)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -706,8 +706,8 @@ state 62
 	expr  goto 83
 
 
-state 63
-	expr : expr '-' . expr  (11)
+state 64
+	expr : expr '*' . expr  (11)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -718,8 +718,8 @@ state 63
 	expr  goto 84
 
 
-state 64
-	expr : expr '*' . expr  (12)
+state 65
+	expr : expr '/' . expr  (12)
 
 	TK_IDENTIFIER  shift 42
 	LIT_INTEGER  shift 43
@@ -730,27 +730,15 @@ state 64
 	expr  goto 85
 
 
-state 65
-	expr : expr '/' . expr  (13)
-
-	TK_IDENTIFIER  shift 42
-	LIT_INTEGER  shift 43
-	'-'  shift 44
-	'('  shift 45
-	.  error
-
-	expr  goto 86
-
-
 state 66
-	cmd : KW_IF '(' expr ')' . KW_THEN cmd elseCmd  (24)
+	cmd : KW_IF '(' expr ')' . KW_THEN cmd elseCmd  (23)
 
-	KW_THEN  shift 87
+	KW_THEN  shift 86
 	.  error
 
 
 state 67
-	cmd : KW_WHILE '(' expr ')' . cmd  (25)
+	cmd : KW_WHILE '(' expr ')' . cmd  (24)
 
 	KW_IF  shift 20
 	KW_WHILE  shift 21
@@ -760,44 +748,38 @@ state 67
 	'{'  shift 15
 	.  error
 
-	cmd  goto 88
+	cmd  goto 87
 	cmdblock  goto 26
 
 
 state 68
-	optcmd : ';' cmd optcmd .  (50)
+	optcmd : ';' cmd optcmd .  (49)
 
-	.  reduce 50
+	.  reduce 49
 
 
 state 69
-	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' ';' .  (6)
-
-	.  reduce 6
-
-
-state 70
-	valuelist : value . valuelist  (37)
-	valuelist : .  (38)
+	valuelist : value . valuelist  (36)
+	valuelist : .  (37)
 
 	LIT_INTEGER  shift 36
 	LIT_REAL  shift 37
 	LIT_CHAR  shift 38
-	';'  reduce 38
+	';'  reduce 37
 
-	value  goto 70
-	valuelist  goto 89
+	value  goto 69
+	valuelist  goto 88
 
 
-state 71
+state 70
 	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' valuelist . ';'  (5)
 
-	';'  shift 90
+	';'  shift 89
 	.  error
 
 
-state 72
-	arg : TK_IDENTIFIER ':' . type  (43)
+state 71
+	arg : TK_IDENTIFIER ':' . type  (42)
 
 	"byte"  shift 8
 	"short"  shift 9
@@ -806,263 +788,237 @@ state 72
 	"double"  shift 12
 	.  error
 
-	type  goto 91
+	type  goto 90
+
+
+state 72
+	funheader : '(' type ')' TK_IDENTIFIER '(' arglist ')' .  (39)
+
+	.  reduce 39
 
 
 state 73
-	funheader : '(' type ')' TK_IDENTIFIER '(' arglist ')' .  (40)
-
-	.  reduce 40
-
-
-state 74
-	optarg : ',' . arg optarg  (44)
+	optarg : ',' . arg optarg  (43)
 
 	TK_IDENTIFIER  shift 51
 	.  error
 
-	arg  goto 92
+	arg  goto 91
+
+
+state 74
+	arglist : arg optarg .  (40)
+
+	.  reduce 40
 
 
 state 75
-	arglist : arg optarg .  (41)
+	expr : '(' expr ')' .  (19)
 
-	.  reduce 41
+	.  reduce 19
 
 
 state 76
-	expr : '(' expr ')' .  (20)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr OPERATOR_LE expr .  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
 
-	.  reduce 20
-
-
-77: shift/reduce conflict (shift 56, reduce 17) on OPERATOR_LE
-77: shift/reduce conflict (shift 57, reduce 17) on OPERATOR_GE
-77: shift/reduce conflict (shift 58, reduce 17) on OPERATOR_EQ
-77: shift/reduce conflict (shift 59, reduce 17) on OPERATOR_NE
-77: shift/reduce conflict (shift 60, reduce 17) on '<'
-77: shift/reduce conflict (shift 61, reduce 17) on '>'
-77: shift/reduce conflict (shift 62, reduce 17) on '+'
-77: shift/reduce conflict (shift 63, reduce 17) on '-'
-77: shift/reduce conflict (shift 64, reduce 17) on '*'
-77: shift/reduce conflict (shift 65, reduce 17) on '/'
-state 77
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr OPERATOR_LE expr .  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'<'  shift 60
-	'>'  shift 61
 	'+'  shift 62
 	'-'  shift 63
 	'*'  shift 64
 	'/'  shift 65
-	')'  reduce 17
-
-
-78: shift/reduce conflict (shift 56, reduce 16) on OPERATOR_LE
-78: shift/reduce conflict (shift 57, reduce 16) on OPERATOR_GE
-78: shift/reduce conflict (shift 58, reduce 16) on OPERATOR_EQ
-78: shift/reduce conflict (shift 59, reduce 16) on OPERATOR_NE
-78: shift/reduce conflict (shift 60, reduce 16) on '<'
-78: shift/reduce conflict (shift 61, reduce 16) on '>'
-78: shift/reduce conflict (shift 62, reduce 16) on '+'
-78: shift/reduce conflict (shift 63, reduce 16) on '-'
-78: shift/reduce conflict (shift 64, reduce 16) on '*'
-78: shift/reduce conflict (shift 65, reduce 16) on '/'
-state 78
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr OPERATOR_GE expr .  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'<'  shift 60
-	'>'  shift 61
-	'+'  shift 62
-	'-'  shift 63
-	'*'  shift 64
-	'/'  shift 65
+	OPERATOR_LE  reduce 16
+	OPERATOR_GE  reduce 16
+	OPERATOR_EQ  reduce 16
+	OPERATOR_NE  reduce 16
+	'<'  reduce 16
+	'>'  reduce 16
 	')'  reduce 16
 
 
-79: shift/reduce conflict (shift 56, reduce 19) on OPERATOR_LE
-79: shift/reduce conflict (shift 57, reduce 19) on OPERATOR_GE
-79: shift/reduce conflict (shift 58, reduce 19) on OPERATOR_EQ
-79: shift/reduce conflict (shift 59, reduce 19) on OPERATOR_NE
-79: shift/reduce conflict (shift 60, reduce 19) on '<'
-79: shift/reduce conflict (shift 61, reduce 19) on '>'
-79: shift/reduce conflict (shift 62, reduce 19) on '+'
-79: shift/reduce conflict (shift 63, reduce 19) on '-'
-79: shift/reduce conflict (shift 64, reduce 19) on '*'
-79: shift/reduce conflict (shift 65, reduce 19) on '/'
-state 79
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-	expr : expr OPERATOR_EQ expr .  (19)
+state 77
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr OPERATOR_GE expr .  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
 
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'<'  shift 60
-	'>'  shift 61
 	'+'  shift 62
 	'-'  shift 63
 	'*'  shift 64
 	'/'  shift 65
-	')'  reduce 19
-
-
-80: shift/reduce conflict (shift 56, reduce 18) on OPERATOR_LE
-80: shift/reduce conflict (shift 57, reduce 18) on OPERATOR_GE
-80: shift/reduce conflict (shift 58, reduce 18) on OPERATOR_EQ
-80: shift/reduce conflict (shift 59, reduce 18) on OPERATOR_NE
-80: shift/reduce conflict (shift 60, reduce 18) on '<'
-80: shift/reduce conflict (shift 61, reduce 18) on '>'
-80: shift/reduce conflict (shift 62, reduce 18) on '+'
-80: shift/reduce conflict (shift 63, reduce 18) on '-'
-80: shift/reduce conflict (shift 64, reduce 18) on '*'
-80: shift/reduce conflict (shift 65, reduce 18) on '/'
-state 80
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr OPERATOR_NE expr .  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'<'  shift 60
-	'>'  shift 61
-	'+'  shift 62
-	'-'  shift 63
-	'*'  shift 64
-	'/'  shift 65
-	')'  reduce 18
-
-
-81: shift/reduce conflict (shift 56, reduce 14) on OPERATOR_LE
-81: shift/reduce conflict (shift 57, reduce 14) on OPERATOR_GE
-81: shift/reduce conflict (shift 58, reduce 14) on OPERATOR_EQ
-81: shift/reduce conflict (shift 59, reduce 14) on OPERATOR_NE
-state 81
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr '<' expr .  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'+'  shift 62
-	'-'  shift 63
-	'*'  shift 64
-	'/'  shift 65
-	'<'  reduce 14
-	'>'  reduce 14
-	')'  reduce 14
-
-
-82: shift/reduce conflict (shift 56, reduce 15) on OPERATOR_LE
-82: shift/reduce conflict (shift 57, reduce 15) on OPERATOR_GE
-82: shift/reduce conflict (shift 58, reduce 15) on OPERATOR_EQ
-82: shift/reduce conflict (shift 59, reduce 15) on OPERATOR_NE
-state 82
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr '>' expr .  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'+'  shift 62
-	'-'  shift 63
-	'*'  shift 64
-	'/'  shift 65
+	OPERATOR_LE  reduce 15
+	OPERATOR_GE  reduce 15
+	OPERATOR_EQ  reduce 15
+	OPERATOR_NE  reduce 15
 	'<'  reduce 15
 	'>'  reduce 15
 	')'  reduce 15
 
 
-83: shift/reduce conflict (shift 56, reduce 10) on OPERATOR_LE
-83: shift/reduce conflict (shift 57, reduce 10) on OPERATOR_GE
-83: shift/reduce conflict (shift 58, reduce 10) on OPERATOR_EQ
-83: shift/reduce conflict (shift 59, reduce 10) on OPERATOR_NE
-state 83
-	expr : expr . '+' expr  (10)
-	expr : expr '+' expr .  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
+state 78
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+	expr : expr OPERATOR_EQ expr .  (18)
 
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
+	'+'  shift 62
+	'-'  shift 63
 	'*'  shift 64
 	'/'  shift 65
+	OPERATOR_LE  reduce 18
+	OPERATOR_GE  reduce 18
+	OPERATOR_EQ  reduce 18
+	OPERATOR_NE  reduce 18
+	'<'  reduce 18
+	'>'  reduce 18
+	')'  reduce 18
+
+
+state 79
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr OPERATOR_NE expr .  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+
+	'+'  shift 62
+	'-'  shift 63
+	'*'  shift 64
+	'/'  shift 65
+	OPERATOR_LE  reduce 17
+	OPERATOR_GE  reduce 17
+	OPERATOR_EQ  reduce 17
+	OPERATOR_NE  reduce 17
+	'<'  reduce 17
+	'>'  reduce 17
+	')'  reduce 17
+
+
+state 80
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr '<' expr .  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+
+	'+'  shift 62
+	'-'  shift 63
+	'*'  shift 64
+	'/'  shift 65
+	OPERATOR_LE  reduce 13
+	OPERATOR_GE  reduce 13
+	OPERATOR_EQ  reduce 13
+	OPERATOR_NE  reduce 13
+	'<'  reduce 13
+	'>'  reduce 13
+	')'  reduce 13
+
+
+state 81
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr '>' expr .  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+
+	'+'  shift 62
+	'-'  shift 63
+	'*'  shift 64
+	'/'  shift 65
+	OPERATOR_LE  reduce 14
+	OPERATOR_GE  reduce 14
+	OPERATOR_EQ  reduce 14
+	OPERATOR_NE  reduce 14
+	'<'  reduce 14
+	'>'  reduce 14
+	')'  reduce 14
+
+
+state 82
+	expr : expr . '+' expr  (9)
+	expr : expr '+' expr .  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+
+	'*'  shift 64
+	'/'  shift 65
+	OPERATOR_LE  reduce 9
+	OPERATOR_GE  reduce 9
+	OPERATOR_EQ  reduce 9
+	OPERATOR_NE  reduce 9
+	'<'  reduce 9
+	'>'  reduce 9
+	'+'  reduce 9
+	'-'  reduce 9
+	')'  reduce 9
+
+
+state 83
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr '-' expr .  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
+
+	'*'  shift 64
+	'/'  shift 65
+	OPERATOR_LE  reduce 10
+	OPERATOR_GE  reduce 10
+	OPERATOR_EQ  reduce 10
+	OPERATOR_NE  reduce 10
 	'<'  reduce 10
 	'>'  reduce 10
 	'+'  reduce 10
@@ -1070,98 +1026,40 @@ state 83
 	')'  reduce 10
 
 
-84: shift/reduce conflict (shift 56, reduce 11) on OPERATOR_LE
-84: shift/reduce conflict (shift 57, reduce 11) on OPERATOR_GE
-84: shift/reduce conflict (shift 58, reduce 11) on OPERATOR_EQ
-84: shift/reduce conflict (shift 59, reduce 11) on OPERATOR_NE
 state 84
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr '-' expr .  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr '*' expr .  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
 
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'*'  shift 64
-	'/'  shift 65
-	'<'  reduce 11
-	'>'  reduce 11
-	'+'  reduce 11
-	'-'  reduce 11
-	')'  reduce 11
+	.  reduce 11
 
 
-85: shift/reduce conflict (shift 56, reduce 12) on OPERATOR_LE
-85: shift/reduce conflict (shift 57, reduce 12) on OPERATOR_GE
-85: shift/reduce conflict (shift 58, reduce 12) on OPERATOR_EQ
-85: shift/reduce conflict (shift 59, reduce 12) on OPERATOR_NE
 state 85
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr '*' expr .  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
+	expr : expr . '+' expr  (9)
+	expr : expr . '-' expr  (10)
+	expr : expr . '*' expr  (11)
+	expr : expr . '/' expr  (12)
+	expr : expr '/' expr .  (12)
+	expr : expr . '<' expr  (13)
+	expr : expr . '>' expr  (14)
+	expr : expr . OPERATOR_GE expr  (15)
+	expr : expr . OPERATOR_LE expr  (16)
+	expr : expr . OPERATOR_NE expr  (17)
+	expr : expr . OPERATOR_EQ expr  (18)
 
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'<'  reduce 12
-	'>'  reduce 12
-	'+'  reduce 12
-	'-'  reduce 12
-	'*'  reduce 12
-	'/'  reduce 12
-	')'  reduce 12
+	.  reduce 12
 
 
-86: shift/reduce conflict (shift 56, reduce 13) on OPERATOR_LE
-86: shift/reduce conflict (shift 57, reduce 13) on OPERATOR_GE
-86: shift/reduce conflict (shift 58, reduce 13) on OPERATOR_EQ
-86: shift/reduce conflict (shift 59, reduce 13) on OPERATOR_NE
 state 86
-	expr : expr . '+' expr  (10)
-	expr : expr . '-' expr  (11)
-	expr : expr . '*' expr  (12)
-	expr : expr . '/' expr  (13)
-	expr : expr '/' expr .  (13)
-	expr : expr . '<' expr  (14)
-	expr : expr . '>' expr  (15)
-	expr : expr . OPERATOR_GE expr  (16)
-	expr : expr . OPERATOR_LE expr  (17)
-	expr : expr . OPERATOR_NE expr  (18)
-	expr : expr . OPERATOR_EQ expr  (19)
-
-	OPERATOR_LE  shift 56
-	OPERATOR_GE  shift 57
-	OPERATOR_EQ  shift 58
-	OPERATOR_NE  shift 59
-	'<'  reduce 13
-	'>'  reduce 13
-	'+'  reduce 13
-	'-'  reduce 13
-	'*'  reduce 13
-	'/'  reduce 13
-	')'  reduce 13
-
-
-state 87
-	cmd : KW_IF '(' expr ')' KW_THEN . cmd elseCmd  (24)
+	cmd : KW_IF '(' expr ')' KW_THEN . cmd elseCmd  (23)
 
 	KW_IF  shift 20
 	KW_WHILE  shift 21
@@ -1171,64 +1069,64 @@ state 87
 	'{'  shift 15
 	.  error
 
-	cmd  goto 93
+	cmd  goto 92
 	cmdblock  goto 26
 
 
-state 88
-	cmd : KW_WHILE '(' expr ')' cmd .  (25)
+state 87
+	cmd : KW_WHILE '(' expr ')' cmd .  (24)
 
-	.  reduce 25
+	.  reduce 24
+
+
+state 88
+	valuelist : value valuelist .  (36)
+
+	.  reduce 36
 
 
 state 89
-	valuelist : value valuelist .  (37)
-
-	.  reduce 37
-
-
-state 90
 	vardec : TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' valuelist ';' .  (5)
 
 	.  reduce 5
 
 
+state 90
+	arg : TK_IDENTIFIER ':' type .  (42)
+
+	.  reduce 42
+
+
 state 91
-	arg : TK_IDENTIFIER ':' type .  (43)
+	optarg : ',' arg . optarg  (43)
+	optarg : .  (44)
+
+	','  shift 73
+	')'  reduce 44
+
+	optarg  goto 93
+
+
+92: shift/reduce conflict (shift 94, reduce 27) on KW_ELSE
+state 92
+	cmd : KW_IF '(' expr ')' KW_THEN cmd . elseCmd  (23)
+	elseCmd : .  (27)
+
+	KW_ELSE  shift 94
+	';'  reduce 27
+	'}'  reduce 27
+
+	elseCmd  goto 95
+
+
+state 93
+	optarg : ',' arg optarg .  (43)
 
 	.  reduce 43
 
 
-state 92
-	optarg : ',' arg . optarg  (44)
-	optarg : .  (45)
-
-	','  shift 74
-	')'  reduce 45
-
-	optarg  goto 94
-
-
-93: shift/reduce conflict (shift 95, reduce 28) on KW_ELSE
-state 93
-	cmd : KW_IF '(' expr ')' KW_THEN cmd . elseCmd  (24)
-	elseCmd : .  (28)
-
-	KW_ELSE  shift 95
-	';'  reduce 28
-	'}'  reduce 28
-
-	elseCmd  goto 96
-
-
 state 94
-	optarg : ',' arg optarg .  (44)
-
-	.  reduce 44
-
-
-state 95
-	elseCmd : KW_ELSE . cmd  (27)
+	elseCmd : KW_ELSE . cmd  (26)
 
 	KW_IF  shift 20
 	KW_WHILE  shift 21
@@ -1238,36 +1136,24 @@ state 95
 	'{'  shift 15
 	.  error
 
-	cmd  goto 97
+	cmd  goto 96
 	cmdblock  goto 26
 
 
+state 95
+	cmd : KW_IF '(' expr ')' KW_THEN cmd elseCmd .  (23)
+
+	.  reduce 23
+
+
 state 96
-	cmd : KW_IF '(' expr ')' KW_THEN cmd elseCmd .  (24)
+	elseCmd : KW_ELSE cmd .  (26)
 
-	.  reduce 24
-
-
-state 97
-	elseCmd : KW_ELSE cmd .  (27)
-
-	.  reduce 27
+	.  reduce 26
 
 
-State 50 contains 1 shift/reduce conflict.
-State 54 contains 4 shift/reduce conflicts.
-State 77 contains 10 shift/reduce conflicts.
-State 78 contains 10 shift/reduce conflicts.
-State 79 contains 10 shift/reduce conflicts.
-State 80 contains 10 shift/reduce conflicts.
-State 81 contains 4 shift/reduce conflicts.
-State 82 contains 4 shift/reduce conflicts.
-State 83 contains 4 shift/reduce conflicts.
-State 84 contains 4 shift/reduce conflicts.
-State 85 contains 4 shift/reduce conflicts.
-State 86 contains 4 shift/reduce conflicts.
-State 93 contains 1 shift/reduce conflict.
+State 92 contains 1 shift/reduce conflict.
 
 
 48 terminals, 18 nonterminals
-52 grammar rules, 98 states
+51 grammar rules, 97 states

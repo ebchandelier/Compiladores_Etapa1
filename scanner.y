@@ -32,13 +32,9 @@
 
 %token TOKEN_ERROR
 
-%left '<' '>'
+%left '<' '>' OPERATOR_GE OPERATOR_LE OPERATOR_NE OPERATOR_EQ
 %left '+' '-'
 %left '*' '/'
-
-//%left ';' '}'
-%left KW_ELSE ';'
-%
 
 %%
 
@@ -51,7 +47,7 @@ program:
 vardec:
 	TK_IDENTIFIER ":" type "=" value ";"
 	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" valuelist ";" //valueList pode ser vazia, conflict
-	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" ";"
+//	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" ";"
 	;
 
 expr:
