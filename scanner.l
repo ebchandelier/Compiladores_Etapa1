@@ -12,7 +12,8 @@ int ({digit})+
 	#include <string.h> 
 	//char *yylval;
 	int getLineNumber(void);
-	int lineCount = 0;
+
+	extern int lineCount;
 
 	int isRunning(void);
 	int running = 0;
@@ -29,7 +30,7 @@ int ({digit})+
 %%
 
 \n	lineCount++;
-<<EOF>> {printf("EOF\n"); running=0; yyterminate();}
+<<EOF>> {printf("EOF\n"); running=0; exit(0);/*yyterminate();*/}
 
 byte	return KW_BYTE;
 short	{printf("found short\n");return KW_SHORT;}

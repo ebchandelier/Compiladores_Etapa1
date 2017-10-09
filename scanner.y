@@ -7,6 +7,7 @@
 	#include<stdio.h>
 	#include<stdlib.h>
 
+    int lineCount = 0;
 	void initMe();
 %}
 
@@ -192,8 +193,8 @@ optcmd:
 %%
 
 void yyerror(char *s) {
-    fprintf(stderr, "%s\n", s);
-    return;
+    fprintf(stderr, "%s at line: %d\n", s, lineCount);
+	exit(3);
 }
 
 #include"main.c"

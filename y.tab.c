@@ -26,8 +26,9 @@
 	#include<stdio.h>
 	#include<stdlib.h>
 
+    int lineCount = 0;
 	void initMe();
-#line 31 "y.tab.c"
+#line 32 "y.tab.c"
 
 #if ! defined(YYSTYPE) && ! defined(YYSTYPE_IS_DECLARED)
 /* Default: YYSTYPE is the semantic value type. */
@@ -404,12 +405,12 @@ static YYSTACKDATA yystack;
 #line 194 "scanner.y"
 
 void yyerror(char *s) {
-    fprintf(stderr, "%s\n", s);
-    return;
+    fprintf(stderr, "%s at line: %d\n", s, lineCount);
+	exit(3);
 }
 
 #include"main.c"
-#line 413 "y.tab.c"
+#line 414 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */
@@ -612,14 +613,14 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 49 "scanner.y"
+#line 50 "scanner.y"
 	{printf("program fundec\n");}
 break;
 case 2:
-#line 50 "scanner.y"
+#line 51 "scanner.y"
 	{printf("program vardec\n");}
 break;
-#line 623 "y.tab.c"
+#line 624 "y.tab.c"
     }
     yystack.s_mark -= yym;
     yystate = *yystack.s_mark;
