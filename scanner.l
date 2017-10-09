@@ -3,7 +3,7 @@ Bruno Loureiro*/
 
 digit [0-9]
 letter [A-Za-z] 
-identifier ([A-Za-z]|_)([A-Za-z]|[0-9]|((\ )*[A-Za-z])|_)*
+identifier ([A-Za-z]|_)([A-Za-z]|[0-9]|((\ )*([A-Za-z]|_))|_)*
 int ({digit})+
 
 
