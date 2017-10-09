@@ -76,11 +76,29 @@ expr:
 
 cmd:
 	KW_READ
-	| KW_PRINT
-	| KW_RETURN
+	| TK_IDENTIFIER "=" expr
+	| TK_IDENTIFIER "[" expr "]" "=" expr
+	| KW_READ ">" TK_IDENTIFIER
+	| KW_PRINT printableList
+	| KW_RETURN expr
 	| KW_IF "(" expr ")" KW_THEN cmd elseCmd
 	| KW_WHILE "(" expr ")" cmd
     | cmdblock
+	;
+
+printableList:
+	printable optPrintable
+	|
+	;
+
+printable:
+	LIT_STRING
+	| expr
+	;
+
+optPrintable:
+	"," printable optPrintable
+	|
 	;
 
 elseCmd:
