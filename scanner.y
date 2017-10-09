@@ -1,6 +1,11 @@
 %{
 	int yylex(void);
 	void yyerror(char *);
+
+	#include <string.h>
+
+#include<stdio.h>
+#include<stdlib.h>
 %}
 
 %token KW_BYTE
@@ -83,11 +88,11 @@ elseCmd:
 
 
 type:
-	"byte"
-	| "short"
-	| "long"
-	| "float"
-	| "double"
+	KW_BYTE
+	| KW_SHORT
+	| KW_LONG
+	| KW_FLOAT
+	| KW_DOUBLE
 	;
 
 value:
@@ -140,3 +145,13 @@ optcmd:
 	";" cmd optcmd
 	|
 	;
+
+
+%%
+
+void yyerror(char *s) {
+    fprintf(stderr, "%s\n", s);
+    return;
+}
+
+#include"main.c"

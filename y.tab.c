@@ -20,7 +20,12 @@
 #line 2 "scanner.y"
 	int yylex(void);
 	void yyerror(char *);
-#line 24 "y.tab.c"
+
+	#include <string.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#line 29 "y.tab.c"
 
 #if ! defined(YYSTYPE) && ! defined(YYSTYPE_IS_DECLARED)
 /* Default: YYSTYPE is the semantic value type. */
@@ -84,11 +89,6 @@ extern int YYPARSE_DECL();
 #define LIT_CHAR 279
 #define LIT_STRING 280
 #define TOKEN_ERROR 281
-#define byte 282
-#define short 283
-#define long 284
-#define float 285
-#define double 286
 #define YYERRCODE 256
 typedef short YYINT;
 static const YYINT yylhs[] = {                           -1,
@@ -122,14 +122,14 @@ static const YYINT yydgoto[] = {                          3,
    17,   52,   53,   74,   27,   34,
 };
 static const YYINT yysindex[] = {                       -38,
-  -49, -180,    0,    0,  -38, -101, -180,    0,    0,    0,
+  -49, -155,    0,    0,  -38, -101, -155,    0,    0,    0,
     0,    0,  -14,    0, -122,    0,    0,  -57, -244,    1,
     7,    0,    0,    0,  -20,    0,  -76, -271, -224,   16,
   -40,  -40, -122,    0,    0,    0,    0,    0,    3,  -35,
  -213,    0,    0,  -40,  -40,  -31,  -24,  -20,    0, -271,
     8,   30,   31,  -27,  -17,  -40,  -40,  -40,  -40,  -40,
   -40,  -40,  -40,  -40,  -40, -185, -122,    0, -271,   21,
- -180,    0, -213,    0,    0,   54,   54,   54,   54,   54,
+ -155,    0, -213,    0,    0,   54,   54,   54,   54,   54,
    54,  -27,  -27,    0,    0, -122,    0,    0,    0,    0,
    31, -182,    0, -122,    0,    0,
 };
@@ -194,7 +194,7 @@ static const YYINT yycheck[] = {                         40,
    41,   62,   41,   60,   44,   62,   71,  263,   60,   59,
    62,  264,   60,    0,   62,  125,   60,  125,   62,   41,
    67,   60,   59,   62,   32,   42,   43,   41,   45,    5,
-   47,  282,  283,  284,  285,  286,   44,   45,   28,   86,
+   47,  257,  258,  259,  260,  261,   44,   45,   28,   86,
    69,    6,   73,   48,   -1,   91,   -1,   94,   56,   57,
    58,   59,   60,   61,   62,   63,   64,   65,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,  262,
@@ -220,8 +220,8 @@ static const YYINT yycheck[] = {                         40,
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
-#define YYMAXTOKEN 286
-#define YYUNDFTOKEN 305
+#define YYMAXTOKEN 281
+#define YYUNDFTOKEN 300
 #define YYTRANSLATE(a) ((a) > YYMAXTOKEN ? YYUNDFTOKEN : (a))
 #if YYDEBUG
 static const char *const yyname[] = {
@@ -237,8 +237,8 @@ static const char *const yyname[] = {
 "KW_DOUBLE","KW_IF","KW_THEN","KW_ELSE","KW_WHILE","KW_FOR","KW_READ",
 "KW_RETURN","KW_PRINT","OPERATOR_LE","OPERATOR_GE","OPERATOR_EQ","OPERATOR_NE",
 "OPERATOR_AND","OPERATOR_OR","TK_IDENTIFIER","LIT_INTEGER","LIT_REAL",
-"LIT_CHAR","LIT_STRING","TOKEN_ERROR","\"byte\"","\"short\"","\"long\"",
-"\"float\"","\"double\"",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"illegal-symbol",
+"LIT_CHAR","LIT_STRING","TOKEN_ERROR",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+"illegal-symbol",
 };
 static const char *const yyrule[] = {
 "$accept : program",
@@ -269,11 +269,11 @@ static const char *const yyrule[] = {
 "cmd : cmdblock",
 "elseCmd : KW_ELSE cmd",
 "elseCmd :",
-"type : \"byte\"",
-"type : \"short\"",
-"type : \"long\"",
-"type : \"float\"",
-"type : \"double\"",
+"type : KW_BYTE",
+"type : KW_SHORT",
+"type : KW_LONG",
+"type : KW_FLOAT",
+"type : KW_DOUBLE",
 "value : LIT_INTEGER",
 "value : LIT_REAL",
 "value : LIT_CHAR",
@@ -329,6 +329,15 @@ typedef struct {
 } YYSTACKDATA;
 /* variables for the parser stack */
 static YYSTACKDATA yystack;
+#line 151 "scanner.y"
+
+void yyerror(char *s) {
+    fprintf(stderr, "%s\n", s);
+    return;
+}
+
+#include"main.c"
+#line 341 "y.tab.c"
 
 #if YYDEBUG
 #include <stdio.h>		/* needed for printf */

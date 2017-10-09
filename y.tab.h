@@ -23,8 +23,3 @@
 #define LIT_CHAR 279
 #define LIT_STRING 280
 #define TOKEN_ERROR 281
-#define byte 282
-#define short 283
-#define long 284
-#define float 285
-#define double 286

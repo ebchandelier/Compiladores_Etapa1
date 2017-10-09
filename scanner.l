@@ -3,7 +3,7 @@ Bruno Loureiro*/
 
 digit [0-9]
 letter [A-Za-z] 
-identifier ({letter}|_)(({letter}|{digit}|\ |_)*({letter}|{digit}|_)+|)
+identifier ({letter}|_)({letter}|{digit}|\ |_)*({letter}|{digit}|_)*
 int ({digit})+
 
 
@@ -18,10 +18,10 @@ int ({digit})+
 	int running = 0;
 	
 	void initMe(void);
-
+    void yyparse();
 	#include"hash.c"
 
-	hashtable_t *hashtable;
+	HashTable *hashtable;
 %}
 
 %%
@@ -43,12 +43,12 @@ read	return KW_READ;
 print	return KW_PRINT;
 return	return KW_RETURN;
 
-{identifier}	{	ht_set( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}		
+{identifier}    {setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
 
-({digit})+	{ht_set( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
-({digit})+(".")({digit})+	{ht_set( hashtable, yytext, LIT_REAL); return LIT_REAL;}
-(\')(.)(\')	{ht_set( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
-(\")([^\"]|(\\\"))*(\")	{ht_set( hashtable, yytext, LIT_STRING);return LIT_STRING;}
+({digit})+	{setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
+({digit})+(".")({digit})+	{setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
+(\')(.)(\')	{setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
+(\")([^\"]|(\\\"))*(\")	{setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
 
 [ \t]   // Ignore whitespace, tab
 [\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\!\&\$\#]	return *yytext;
@@ -85,9 +85,9 @@ int yywrap(void) {
 
 void initMe(void) {
 	
-	hashtable = ht_create( 65536 );
+	hashtable = createHashTable( 65536 );
 	running=1;
 }
 
-#include "main.c"
+//#include "main.c"
 
