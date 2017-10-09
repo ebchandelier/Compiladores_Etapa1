@@ -23,14 +23,16 @@ int ({digit})+
 	void initMe(void);
     void yyparse();
 	#include"hash.c"
+	#include"hash_table_test.c"
 
 	HashTable *hashtable;
+	HASH_TABLE table;
 %}
 
 %%
 
 \n	lineCount++;
-<<EOF>> {printf("EOF\n"); running=0; printHash(hashtable); exit(0);/*yyterminate();*/}
+<<EOF>> {print(&table); printf("EOF\n"); running=0; exit(0);/*yyterminate();*/}
 
 byte	return KW_BYTE;
 short	{return KW_SHORT;}
@@ -46,7 +48,7 @@ read	return KW_READ;
 print	return KW_PRINT;
 return	return KW_RETURN;
 
-{identifier}    {setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
+{identifier}    {printf("found a identifier\n");insert(&table, yytext, TK_IDENTIFIER);setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
 
 ({digit})+	{setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
 ({digit})+(".")({digit})+	{setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}

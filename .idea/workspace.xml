@@ -10,10 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0429df86-8a59-44ca-a3bb-74bce6899011" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/etapa2" afterPath="$PROJECT_DIR$/etapa2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lex.yy.c" afterPath="$PROJECT_DIR$/lex.yy.c" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanner.l" afterPath="$PROJECT_DIR$/scanner.l" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanner.y" afterPath="$PROJECT_DIR$/scanner.y" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/y.tab.c" afterPath="$PROJECT_DIR$/y.tab.c" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,11 +37,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="scanner.l" pinned="false" current-in-tab="true">
+      <file leaf-file-name="scanner.l" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scanner.l">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+            <state relative-caret-position="150">
+              <caret line="49" column="0" lean-forward="true" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hash_table_test.c" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hash_table_test.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="294">
+              <caret line="26" column="28" lean-forward="false" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -98,7 +108,9 @@
         <option value="$PROJECT_DIR$/y.output" />
         <option value="$PROJECT_DIR$/main.c" />
         <option value="$PROJECT_DIR$/scanner.y" />
+        <option value="$PROJECT_DIR$/hash_table_test.c.c" />
         <option value="$PROJECT_DIR$/scanner.l" />
+        <option value="$PROJECT_DIR$/hash_table_test.c" />
       </list>
     </option>
   </component>
@@ -164,7 +176,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15923000" />
+    <option name="totallyTimeSpent" value="19028000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="1368" height="780" extended-state="6" />
@@ -229,21 +241,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/y.output">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="561" column="14" lean-forward="true" selection-start-line="561" selection-start-column="14" selection-end-line="561" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scanner.y">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -532,10 +529,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/hash_table_test.c.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scanner.l">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+        <state relative-caret-position="150">
+          <caret line="49" column="0" lean-forward="true" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hash_table_test.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="26" column="28" lean-forward="false" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
           <folding />
         </state>
       </provider>
