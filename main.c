@@ -1,8 +1,8 @@
 int main(void) {
 
-	//initMe();
+	initMe();
 
-	//yyin = fopen("a.txt", "r");
+//	yyin = fopen("a.txt", "r");
 	//while(isRunning()==1){
 	//	printf("is running: %d\n", isRunning());
 		//debud
@@ -10,9 +10,9 @@ int main(void) {
 		//printf("number of lines: %d\n", getLineNumber());
 		//printf("::::: %d\n", ht_get( hashtable, "eduardo" ));
 //	}
+    yyparse();
 //	fclose(yyin);
 
-    yyparse();
 
 	printf("here\n");
 	return 0;

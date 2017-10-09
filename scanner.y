@@ -4,8 +4,10 @@
 
 	#include <string.h>
 
-#include<stdio.h>
-#include<stdlib.h>
+	#include<stdio.h>
+	#include<stdlib.h>
+
+	void initMe();
 %}
 
 %token KW_BYTE
@@ -44,8 +46,8 @@
 %%
 
 program:
-	fundec //program
-	| vardec program
+	fundec program {printf("program fundec\n");}
+	| vardec program {printf("program vardec\n");}
 	|
 	;
 

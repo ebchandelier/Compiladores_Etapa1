@@ -3,20 +3,22 @@ Bruno Loureiro*/
 
 digit [0-9]
 letter [A-Za-z] 
-identifier ({letter}|_)({letter}|{digit}|\ |_)*({letter}|{digit}|_)*
+identifier ([A-Za-z]|_)([A-Za-z]|[0-9]|((\ )*[A-Za-z])|_)*
 int ({digit})+
 
 
 %{
-	#include"tokens.h"
+	//#include"tokens.h"
 	#include <string.h> 
-	char *yylval;
+	//char *yylval;
 	int getLineNumber(void);
 	int lineCount = 0;
 
 	int isRunning(void);
 	int running = 0;
-	
+
+	#include"y.tab.h"
+
 	void initMe(void);
     void yyparse();
 	#include"hash.c"
@@ -30,7 +32,7 @@ int ({digit})+
 <<EOF>> {printf("EOF\n"); running=0; yyterminate();}
 
 byte	return KW_BYTE;
-short	return KW_SHORT;
+short	{printf("found short\n");return KW_SHORT;}
 long	return KW_LONG;
 float	return KW_FLOAT;
 double	return KW_DOUBLE;
@@ -43,9 +45,9 @@ read	return KW_READ;
 print	return KW_PRINT;
 return	return KW_RETURN;
 
-{identifier}    {setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
+{identifier}    {printf("found a identifier\n");setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
 
-({digit})+	{setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
+({digit})+	{printf("found a int\n"); setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
 ({digit})+(".")({digit})+	{setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
 (\')(.)(\')	{setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
 (\")([^\"]|(\\\"))*(\")	{setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
