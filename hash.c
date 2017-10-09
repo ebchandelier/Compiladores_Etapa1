@@ -3,6 +3,14 @@
 #include <limits.h>
 #include <string.h>
 
+#define SYMBOL_LIT_INT 			1
+#define SYMBOL_LIT_REAL			2
+#define SYMBOL_LIT_CHAR			3
+#define SYMBOL_LIT_STRING		4
+#define SYMBOL_ARR_IDENTIFIER 	5
+#define SYMBOL_FUN_IDENTIFIER	6
+#define SYMBOL_VAR_IDENTIFIER	7
+
 struct hash_table_entry {
 	char *key;
 	int value;

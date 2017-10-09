@@ -52,13 +52,12 @@ program:
 	;
 
 vardec:
-	TK_IDENTIFIER ":" type "=" value ";"
-	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" valuelist ";" //valueList pode ser vazia, conflict
-//	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" ";"
+	TK_IDENTIFIER ":" type "=" value ";" //{} setHashValue
+	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" valuelist ";" //setHashValue
 	;
 
 expr:
-    LIT_INTEGER //{ $$ = con($1); }
+    LIT_INTEGER //setHashValue { $$ = con($1); }
     | funcall
     | TK_IDENTIFIER at_array //{ $$ = id($1); }
     | '-' expr //%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
@@ -102,7 +101,7 @@ printableList:
 	;
 
 printable:
-	LIT_STRING
+	LIT_STRING //setHashValue ?
 	| expr
 	;
 
@@ -126,9 +125,9 @@ type:
 	;
 
 value:
-	LIT_INTEGER
-	| LIT_REAL
-	| LIT_CHAR
+	LIT_INTEGER //setHashValue
+	| LIT_REAL //setHashValue
+	| LIT_CHAR //setHashValue
 	;
 
 valuelist:
@@ -141,7 +140,7 @@ fundec:
 	;
 
 funheader:
-	"(" type ")" TK_IDENTIFIER "(" arglist ")"
+	"(" type ")" TK_IDENTIFIER "(" arglist ")" //setHashValue
 	;
 
 arglist:
@@ -150,7 +149,7 @@ arglist:
 	;
 
 arg:
-	TK_IDENTIFIER ":" type
+	TK_IDENTIFIER ":" type //setHashValue?
 	;
 
 optarg:
