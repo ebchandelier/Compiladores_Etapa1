@@ -75,8 +75,7 @@ expr:
     ;
 
 cmd:
-	KW_READ
-	| TK_IDENTIFIER "=" expr
+	TK_IDENTIFIER "=" expr
 	| TK_IDENTIFIER "[" expr "]" "=" expr
 	| KW_READ ">" TK_IDENTIFIER
 	| KW_PRINT printableList
@@ -84,6 +83,7 @@ cmd:
 	| KW_IF "(" expr ")" KW_THEN cmd elseCmd
 	| KW_WHILE "(" expr ")" cmd
     | cmdblock
+    |
 	;
 
 printableList:
@@ -158,7 +158,6 @@ cmdblock:
 
 cmdlist:
 	cmd optcmd
-	|
 	;
 
 optcmd:
