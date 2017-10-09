@@ -126,6 +126,19 @@ void setHashValue(HashTable *hashtable, char *key, int value) {
 	}
 }
 
+void printHash(HashTable *hashtable){
+	HashEntry *current = NULL;
+	int i = 0;
+	int hashSize = hashtable->size;
+	for (i = 0; i < hashSize; i++){
+		current = hashtable->table[i];
+		if (current == NULL)
+			continue;
+
+		printf("[%d] key = %s     value = %d\n", i, current->key, current->value);
+	}
+}
+
 /* Retrieve a key-value pair from a hash table. */
 int getHashValue(HashTable *hashtable, char *key) {
 	int bin = 0;

@@ -30,10 +30,10 @@ int ({digit})+
 %%
 
 \n	lineCount++;
-<<EOF>> {printf("EOF\n"); running=0; exit(0);/*yyterminate();*/}
+<<EOF>> {printf("EOF\n"); running=0; printHash(hashtable); exit(0);/*yyterminate();*/}
 
 byte	return KW_BYTE;
-short	{printf("found short\n");return KW_SHORT;}
+short	{return KW_SHORT;}
 long	return KW_LONG;
 float	return KW_FLOAT;
 double	return KW_DOUBLE;
@@ -46,9 +46,9 @@ read	return KW_READ;
 print	return KW_PRINT;
 return	return KW_RETURN;
 
-{identifier}    {printf("found a identifier\n");setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
+{identifier}    {setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
 
-({digit})+	{printf("found a int\n"); setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
+({digit})+	{setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
 ({digit})+(".")({digit})+	{setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
 (\')(.)(\')	{setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
 (\")([^\"]|(\\\"))*(\")	{setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
