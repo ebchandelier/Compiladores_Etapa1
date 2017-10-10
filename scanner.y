@@ -73,6 +73,8 @@ expr:
     | expr OPERATOR_NE expr  //{ $$ = opr(NE, 2, $1, $3); }
     | expr OPERATOR_EQ expr  //{ $$ = opr(EQ, 2, $1, $3); }
     | '(' expr ')'  //{ $$ = $2; }
+    | expr OPERATOR_OR expr
+    | expr OPERATOR_AND expr
     ;
 
 at_array:
