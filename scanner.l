@@ -8,9 +8,7 @@ int ({digit})+
 
 
 %{
-	//#include"tokens.h"
 	#include <string.h> 
-	//char *yylval;
 	int getLineNumber(void);
 
 	extern int lineCount;
@@ -32,7 +30,7 @@ int ({digit})+
 %%
 
 \n	lineCount++;
-<<EOF>> {print(&table); printf("EOF\n"); running=0; exit(0);/*yyterminate();*/}
+<<EOF>> {print(&table); printf("\n\n\n\n"); printHash(hashtable); printf("EOF\n"); running=0; exit(0);/*yyterminate();*/}
 
 byte	return KW_BYTE;
 short	{return KW_SHORT;}
@@ -48,12 +46,12 @@ read	return KW_READ;
 print	return KW_PRINT;
 return	return KW_RETURN;
 
-{identifier}    {printf("found a identifier\n");insert(&table, yytext, TK_IDENTIFIER);setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
+{identifier}    {/*printf("found an identifier\n");*/insert(&table, yytext, TK_IDENTIFIER);setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
 
-({digit})+	{setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
-({digit})+(".")({digit})+	{setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
-(\')(.)(\')	{setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
-(\")([^\"]|(\\\"))*(\")	{setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
+({digit})+	{insert(&table,yytext, LIT_INTEGER); setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
+({digit})+(".")({digit})+	{insert(&table,yytext, LIT_REAL); setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
+(\')(.)(\')	{insert(&table,yytext, LIT_CHAR); setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
+((\")([^\"]|(\\\"))*(\")) {/*removeSpecialChars(yytext, yyleng); */insert(&table,yytext, LIT_STRING); setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
 
 [ \t]   // Ignore whitespace, tab
 [\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\!\&\$\#]	return *yytext;
@@ -65,7 +63,7 @@ return	return KW_RETURN;
 \&&	return OPERATOR_AND;
 \|\|	return OPERATOR_OR;
 
-(\/\/)(.)*(\n)	{/*printf("simple comment"); */lineCount++; break;}
+(\/\/)(.)*(\n)	{/*printf("simple comment"); */ lineCount++; break;}
 (\/\*)(.|\n)*(\*\/)	{/*printf("mult comment");*/ break;}
 
 .	return TOKEN_ERROR;
@@ -89,7 +87,7 @@ int yywrap(void) {
 } 
 
 void initMe(void) {
-	
+	lineCount = 1;
 	hashtable = createHashTable( 65536 );
 	running=1;
 }

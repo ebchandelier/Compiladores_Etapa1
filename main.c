@@ -1,8 +1,10 @@
+extern FILE *yyin;
+
 int main(void) {
 
 	initMe();
 
-//	yyin = fopen("a.txt", "r");
+	yyin = fopen("a.txt", "r");
 	//while(isRunning()==1){
 	//	printf("is running: %d\n", isRunning());
 		//debud
@@ -11,7 +13,7 @@ int main(void) {
 		//printf("::::: %d\n", ht_get( hashtable, "eduardo" ));
 //	}
     yyparse();
-//	fclose(yyin);
+	fclose(yyin);
 
 
 	printf("here\n");

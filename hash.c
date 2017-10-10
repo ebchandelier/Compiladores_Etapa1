@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <string.h>
 
-#define SYMBOL_LIT_INT 			1
+#define SYMBOL_LIT_INTEGER		1
 #define SYMBOL_LIT_REAL			2
 #define SYMBOL_LIT_CHAR			3
 #define SYMBOL_LIT_STRING		4
@@ -90,6 +90,10 @@ void setHashValue(HashTable *hashtable, char *key, int value) {
 	HashEntry *newpair = NULL;
 	HashEntry *next = NULL;
 	HashEntry *last = NULL;
+
+	if (key[0] == 'P'){
+		printf("hehere\n");
+	}
 
 	bin = ht_hash( hashtable, key );
 
