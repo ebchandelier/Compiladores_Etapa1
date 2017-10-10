@@ -47,14 +47,14 @@
 %%
 
 program:
-	fundec program {printf("program fundec\n");}
-	| vardec program {printf("program vardec\n");}
+	fundec program	{printf("program fundec\n");}
+	| vardec program	{printf("program vardec\n");}
 	|
 	;
 
 vardec:
-	TK_IDENTIFIER ":" type "=" value ";" //{} setHashValue
-	| TK_IDENTIFIER ":" type "[" LIT_INTEGER "]" valuelist ";" //setHashValue
+	TK_IDENTIFIER ':' type '=' value ';'	{printf("vardec...\n");}//{} setHashValue
+	| TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' valuelist ';' //setHashValue
 	;
 
 expr:
@@ -76,22 +76,22 @@ expr:
     ;
 
 at_array:
-	"[" expr "]"
+	'[' expr ']'
 	|
 	;
 
 funcall:
-	TK_IDENTIFIER "(" paramlist ")"
+	TK_IDENTIFIER '(' paramlist ')'
 	;
 
 cmd:
-	TK_IDENTIFIER "=" expr
-	| TK_IDENTIFIER "[" expr "]" "=" expr
-	| KW_READ ">" TK_IDENTIFIER
+	TK_IDENTIFIER '=' expr
+	| TK_IDENTIFIER '[' expr ']' '=' expr
+	| KW_READ '>' TK_IDENTIFIER
 	| KW_PRINT printableList
 	| KW_RETURN expr
-	| KW_IF "(" expr ")" KW_THEN cmd elseCmd
-	| KW_WHILE "(" expr ")" cmd
+	| KW_IF '(' expr ')' KW_THEN cmd elseCmd
+	| KW_WHILE '(' expr ')' cmd
     | cmdblock
     |
 	;
@@ -107,7 +107,7 @@ printable:
 	;
 
 optPrintable:
-	"," printable optPrintable
+	',' printable optPrintable
 	|
 	;
 
@@ -141,7 +141,7 @@ fundec:
 	;
 
 funheader:
-	"(" type ")" TK_IDENTIFIER "(" arglist ")" //setHashValue
+	'(' type ')' TK_IDENTIFIER '(' arglist ')' //setHashValue
 	;
 
 arglist:
@@ -150,11 +150,11 @@ arglist:
 	;
 
 arg:
-	TK_IDENTIFIER ":" type //setHashValue?
+	TK_IDENTIFIER ':' type //setHashValue?
 	;
 
 optarg:
-	"," arg optarg
+	',' arg optarg
 	|
 	;
 
@@ -168,7 +168,7 @@ param:
 	;
 
 optparam:
-	"," param optparam
+	',' param optparam
 	|
 	;
 
@@ -177,7 +177,7 @@ funbody:
 	;
 
 cmdblock:
-	"{" cmdlist "}"
+	'{' cmdlist '}'
 	;
 
 cmdlist:
@@ -185,7 +185,7 @@ cmdlist:
 	;
 
 optcmd:
-	";" cmd optcmd
+	';' cmd optcmd
 	|
 	;
 
