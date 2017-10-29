@@ -9,8 +9,8 @@
  #
 
 
-etapa1:etapa2 lex.yy.c
-	gcc -o etapa2 lex.yy.c y.tab.c
+etapa1:etapa3 lex.yy.c
+	gcc -o etapa3 ast.c lex.yy.c y.tab.c 
 
 etapa2: scanner.y
 	yacc -d scanner.y

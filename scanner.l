@@ -16,11 +16,16 @@ int ({digit})+
 	int isRunning(void);
 	int running = 0;
 
+	
+	#include"hash.h"
+	#include"ast.h"
+	#include"hash.c"
+
 	#include"y.tab.h"
 
 	void initMe(void);
     void yyparse();
-	#include"hash.c"
+
 	#include"hash_table_test.c"
 
 	HashTable *hashtable;
@@ -30,7 +35,7 @@ int ({digit})+
 %%
 
 \n	lineCount++;
-<<EOF>> {print(&table); printf("\n\n\n\n"); printHash(hashtable); printf("EOF\n"); running=0; exit(0);/*yyterminate();*/}
+<<EOF>> {print(&table); printf("\n\n\n\n"); printHash(hashtable); printf("EOF\n"); running=0; return 0;exit(0);/*yyterminate();*/}
 
 byte	return KW_BYTE;
 short	{return KW_SHORT;}
