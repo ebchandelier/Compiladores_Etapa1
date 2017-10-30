@@ -159,7 +159,7 @@ optPrintable:
 	;
 
 elseCmd:
-    KW_ELSE cmd { $$ = $2; }
+    KW_ELSE cmd { $$ = astCreate(ELSE_CMD, 0, $2, 0, 0, 0); }
     |	{ $$ = 0; }
     ;
 

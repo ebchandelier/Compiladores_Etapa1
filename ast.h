@@ -48,6 +48,7 @@
 #define AND 43
 #define PARENTESES 44
 #define AST_SYMBOL_ARRAY 45
+#define ELSE_CMD 46
 
 //problem....use enum?
 
