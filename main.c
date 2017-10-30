@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
 	
 	initMe();
 	
-	//yyin = fopen(argv[1], "r");
-	yyin = fopen("a.txt", "r");
+	yyin = fopen(argv[1], "r");
+	//yyin = fopen("a.txt", "r");
 	
 	yyparse();
 	
@@ -31,9 +31,9 @@ int main(int argc, char** argv) {
 
 	//astPrint(astRoot,0);
 
-	//char* outuputFile = toOutput(astRoot);
+	char* outputFile = toOutput(astRoot);
 
-	//WriteToFile(argv[2],outuputFile);
+	WriteToFile(argv[2],outputFile);
 
 	return 0;
 }

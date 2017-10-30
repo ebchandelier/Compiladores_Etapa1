@@ -104,7 +104,7 @@ vardec:
 
 expr:
     LIT_INTEGER { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0);}
-    | LIT_CHAR { } //do something
+    | LIT_CHAR { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0); }
     | funcall	{ $$ = $1; }	
     | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL_ARRAY, $1, $2, 0, 0, 0);}
     | '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
