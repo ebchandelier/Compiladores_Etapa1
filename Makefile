@@ -9,7 +9,7 @@
  #
 
 
-etapa1:etapa3 lex.yy.c
+etapa1:etapa2 lex.yy.c
 	gcc -o etapa3 ast.c lex.yy.c y.tab.c 
 
 etapa2: scanner.y
@@ -19,4 +19,4 @@ lex.yy.c: scanner.l
 	lex scanner.l
 
 clean:
-	rm lex.yy.c etapa2
+	rm lex.yy.c etapa3

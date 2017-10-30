@@ -72,6 +72,10 @@
 %type<ast> optPrintable
 %type<ast> elseCmd
 %type<ast> optcmd
+%type<ast> funcall
+%type<ast> paramlist
+%type<ast> param
+%type<ast> optparam
 
 %left '<' '>' OPERATOR_GE OPERATOR_LE OPERATOR_NE OPERATOR_EQ
 %left '+' '-'
@@ -99,36 +103,36 @@ vardec:
 	;
 
 expr:
-    LIT_INTEGER { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
-    | funcall	{}
+    LIT_INTEGER { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0);}
+    | funcall	{ $$ = $1; }	
     | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL, $1, $2, 0, 0, 0);}
     | '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
     | expr '+' expr	{ $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0);}
-    | expr '-' expr //{ $$ = opr('-', 2, $1, $3); }
+    | expr '-' expr { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0);}
     | expr '*' expr { $$ = astCreate(AST_MUL, 0, $1, $3, 0, 0);}
-    | expr '/' expr //{ $$ = opr('/', 2, $1, $3); }
-    | expr '<' expr //{ $$ = opr('<', 2, $1, $3); }
-    | expr '>' expr //{ $$ = opr('>', 2, $1, $3); }
-    | expr OPERATOR_GE expr  //{ $$ = opr(GE, 2, $1, $3); }
-    | expr OPERATOR_LE expr  //{ $$ = opr(LE, 2, $1, $3); }
-    | expr OPERATOR_NE expr  //{ $$ = opr(NE, 2, $1, $3); }
-    | expr OPERATOR_EQ expr  //{ $$ = opr(EQ, 2, $1, $3); }
+    | expr '/' expr { $$ = astCreate(AST_DIV, 0, $1, $3, 0, 0);}
+    | expr '<' expr { $$ = astCreate(AST_LESS, 0, $1, $3, 0, 0);}
+    | expr '>' expr { $$ = astCreate(AST_GREA, 0, $1, $3, 0, 0);}
+    | expr OPERATOR_GE expr  { $$ = astCreate(GE, 0, $1, $3, 0, 0); }
+    | expr OPERATOR_LE expr  { $$ = astCreate(LE, 0, $1, $3, 0, 0); }
+    | expr OPERATOR_NE expr  { $$ = astCreate(NOT_EQUAL, 0, $1, $3, 0, 0); }
+    | expr OPERATOR_EQ expr  { $$ = astCreate(EQUAL, 0, $1, $3, 0, 0); }
     | '(' expr ')'  { $$ = $2; }
-    | expr OPERATOR_OR expr {}
-    | expr OPERATOR_AND expr
+    | expr OPERATOR_OR expr { $$ = astCreate(OR, 0, $1, $3, 0, 0); }
+    | expr OPERATOR_AND expr { $$ = astCreate(AND, 0, $1, $3, 0, 0); }
     ;
 
 at_array:
-	'[' expr ']'	{}
-	|	{}
+	'[' expr ']'	{ $$ = astCreate(AST_AT_ARRAY, 0, $2, 0, 0, 0); }
+	|	{ $$ = 0; }
 	;
 
 funcall:
-	TK_IDENTIFIER '(' paramlist ')'	{}
+	TK_IDENTIFIER '(' paramlist ')'	{ $$ = astCreate(AST_FUN_CAL, $1, $3, 0, 0, 0); }
 	;
 
 cmd:
-	TK_IDENTIFIER '=' expr { $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
+	TK_IDENTIFIER '=' expr { $$ = astCreate(AST_SYMBOL_ASSIGNMENT, $1, $3, 0, 0, 0);}
 	| TK_IDENTIFIER '[' expr ']' '=' expr { $$ = astCreate(ASSIGNMENT_LIST_INDEX, $1, $3, $6, 0, 0); }
 	| KW_READ '>' TK_IDENTIFIER { $$ = astCreate(READ_CMD, 0, astCreate(AST_SYMBOL, $3, 0, 0, 0, 0), 0, 0, 0); }
 	| KW_PRINT printableList { $$ = astCreate(PRINT_CMD, 0, $2, 0, 0, 0); }
@@ -136,7 +140,7 @@ cmd:
 	| KW_IF '(' expr ')' KW_THEN cmd elseCmd { $$ = astCreate(IF_THEN_ELSE_CMD, 0, $3, $6, $7, 0);}
 	| KW_WHILE '(' expr ')' cmd { $$ = astCreate(WHILE_CMD, 0, $3, $5, 0, 0); }
     | cmdblock	{ $$ = $1; }
-    |
+    |	{ $$ = 0; }
 	;
 
 printableList:
@@ -145,18 +149,18 @@ printableList:
 	;
 
 printable:
-	LIT_STRING //setHashValue ?
-	| expr
+	LIT_STRING { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0); }
+	| expr	{ $$ = $1; }
 	;
 
 optPrintable:
-	',' printable optPrintable
-	|
+	',' printable optPrintable { $$ = astCreate(PRINT_CONTENT, 0, $2, $3, 0, 0); }
+	|	{ $$ = 0; } 
 	;
 
 elseCmd:
-    KW_ELSE cmd
-    |
+    KW_ELSE cmd { $$ = $2; }
+    |	{ $$ = 0; }
     ;
 
 
@@ -208,17 +212,17 @@ optarg:
 	;
 
 paramlist:
-	param optparam
-	|
+	param optparam { $$ = astCreate(AST_PARAM_LIST, 0, $1, $2, 0, 0); }
+	|	{ $$ = 0; }
 	;
 
 param:
-	expr
+	expr { $$ = $1; }
 	;
 
 optparam:
-	',' param optparam
-	|
+	',' param optparam  { $$ = astCreate(AST_PARAM_LIST, 0, $2, $3, 0, 0); }
+	|	{ $$ = 0; }
 	;
 
 funbody:
@@ -234,7 +238,7 @@ cmdlist:
 	;
 
 optcmd:
-	';' cmd optcmd
+	';' cmd optcmd	{ $$ = astCreate(AST_CMD_LIST, 0, $2, $3, 0, 0); }
 	|	{ $$ = 0; }
 	;
 

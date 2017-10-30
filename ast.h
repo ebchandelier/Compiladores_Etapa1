@@ -32,6 +32,20 @@
 #define PRINT_CONTENT 27
 #define AST_CMD_BLOCK 28
 #define AST_CMD_LIST 29
+#define AST_FUN_CAL 30
+#define AST_AT_ARRAY 31
+#define AST_SYMBOL_ASSIGNMENT 32
+#define AST_SUB 33
+#define AST_DIV 34
+#define AST_LESS 35
+#define AST_GREA 36
+#define AST_PARAM_LIST 37
+#define GE 38
+#define LE 39
+#define EQUAL 40
+#define NOT_EQUAL 41
+#define OR 42
+#define AND 43
 
 //problem....use enum?
 

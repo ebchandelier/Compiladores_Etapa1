@@ -22,7 +22,7 @@ void astPrint(AST* node, int level) {
         int i;
         for(i=0; i<level; ++i) {
 
-            fprintf(stderr, "  ");
+            fprintf(stderr, " | ");
         }
 
         //fprintf(stderr, "AST( ");
@@ -58,6 +58,21 @@ void astPrint(AST* node, int level) {
             case PRINT_CONTENT: fprintf(stderr, "PRINT_CONTENT"); break;
             case AST_CMD_BLOCK: fprintf(stderr, "AST_CMD_BLOCK"); break;
             case AST_CMD_LIST:  fprintf(stderr, "AST_CMD_LIST"); break;
+            case AST_FUN_CAL:   fprintf(stderr, "AST_FUN_CAL"); break;
+            case AST_AT_ARRAY: fprintf(stderr, "AST_AT_ARRAY"); break;
+            case AST_SYMBOL_ASSIGNMENT: fprintf(stderr, "AST_SYMBOL_ASSIGNMENT"); break;
+            case AST_SUB:       fprintf(stderr, "AST_SUB"); break;
+            case AST_DIV:       fprintf(stderr, "AST_DIV"); break;
+            case AST_LESS:      fprintf(stderr, "AST_LESS"); break;
+            case AST_GREA:      fprintf(stderr, "AST_GREA"); break;
+            case AST_PARAM_LIST:    fprintf(stderr, "AST_PARAM_LIST"); break;
+            case GE:        fprintf(stderr, "GE"); break;
+            case LE:        fprintf(stderr, "LE"); break;
+            case EQUAL:        fprintf(stderr, "EQUAL"); break;
+            case NOT_EQUAL:        fprintf(stderr, "NOT_EQUAL"); break;
+            case OR:        fprintf(stderr, "OR"); break;
+            case AND:        fprintf(stderr, "AND"); break;
+            
 
             default:       fprintf(stderr, "UNKNOWN");
         }
