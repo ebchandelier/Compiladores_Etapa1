@@ -51,12 +51,12 @@ read	return KW_READ;
 print	return KW_PRINT;
 return	return KW_RETURN;
 
-{identifier}    {/*printf("found an identifier\n");*/insert(&table, yytext, TK_IDENTIFIER);setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
+{identifier}    {insert(&table, yytext, TK_IDENTIFIER);yylval.symbol = setHashValue( hashtable, yytext, TK_IDENTIFIER );return TK_IDENTIFIER;}
 
-({digit})+	{insert(&table,yytext, LIT_INTEGER); setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
-({digit})+(".")({digit})+	{insert(&table,yytext, LIT_REAL); setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
-(\')(.)(\')	{insert(&table,yytext, LIT_CHAR); setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
-((\")([^\"]|(\\\"))*(\")) {/*removeSpecialChars(yytext, yyleng); */insert(&table,yytext, LIT_STRING); setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
+({digit})+	{insert(&table,yytext, LIT_INTEGER); yylval.symbol = setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
+({digit})+(".")({digit})+	{insert(&table,yytext, LIT_REAL); yylval.symbol = setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
+(\')(.)(\')	{insert(&table,yytext, LIT_CHAR); yylval.symbol = setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
+((\")([^\"]|(\\\"))*(\")) {/*removeSpecialChars(yytext, yyleng); */insert(&table,yytext, LIT_STRING); yylval.symbol = setHashValue( hashtable, yytext, LIT_STRING);return LIT_STRING;}
 
 [ \t]   // Ignore whitespace, tab
 [\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\!\&\$\#]	return *yytext;

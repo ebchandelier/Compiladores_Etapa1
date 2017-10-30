@@ -1,26 +1,38 @@
 extern FILE *yyin;
 
-int main(void) {
-	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+int WriteToFile(char* path, char* content)
+{
+	FILE* file;
+
+	file = fopen(path,"w");
+
+	if(file == NULL) {
+
+		fprintf(stderr,"ERROR: Couldn't open %s\n",path);
+		exit(1);
+	}
+
+	fprintf(file,"%s",content);
+
+	return 1;
+}
+
+
+int main(int argc, char** argv) {
+	
 	initMe();
-	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-	yyin = fopen("a.txt", "r");
-	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-	//while(isRunning()==1){
-	//	printf("is running: %d\n", isRunning());
-		//debud
-	//	printf("get %d\n", yylex());
-		//printf("number of lines: %d\n", getLineNumber());
-		//printf("::::: %d\n", ht_get( hashtable, "eduardo" ));
-//	}
+	
+	yyin = fopen(argv[1], "r");
+	
 	yyparse();
-	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+	
 	fclose(yyin);
 
-
-	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-
 	astPrint(astRoot,0);
+
+	char* outuputFile = toOutput(astRoot);
+
+	WriteToFile(argv[2],outuputFile);
 
 	return 0;
 }

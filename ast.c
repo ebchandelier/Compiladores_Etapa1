@@ -13,6 +13,369 @@ AST* astCreate(int type, HashEntry* symbol, AST* son1, AST* son2, AST* son3, AST
 
     return newNode;
 }
+
+char* toOutput(AST* node) {
+
+    if(node == 0) {
+
+		return "";
+    
+    } else {
+
+        switch(node->type) {
+
+            case AST_SYMBOL:    {
+                
+                fprintf(stderr, "AST_SYMBOL\n");                
+                
+                char* buffer = (char*)calloc(strlen(node->symbol->key+1), sizeof(char));
+                sprintf(buffer, "%s", node->symbol->key);
+                return buffer;
+            }
+
+            case AST_SYMBOL_ARRAY: {
+
+                fprintf(stderr, "AST_SYMBOL_ARRAY\n");
+
+                char* bufferA = toOutput(node->son[0]);
+                
+                char* buffer = (char*)calloc(2 + strlen(bufferA) + strlen(node->symbol->key), sizeof(char));
+                sprintf(buffer, "%s%s", node->symbol->key, bufferA);
+
+                return buffer;
+            }
+
+            case AST_ADD:   {
+
+                fprintf(stderr, "ADD\n");
+
+                char* bufferA = toOutput(node->son[0]);
+                char* bufferB = toOutput(node->son[1]);
+                
+                char* buffer = (char*)calloc(3 + strlen(bufferA) + strlen(bufferB) + 1, sizeof(char));
+                sprintf(buffer, "%s + %s", bufferA, bufferB);
+
+                return buffer;
+
+            }       
+            // case AST_MUL:       fprintf(stderr, "MUL"); break;
+            // case AST_CHANGE_SIGN:    fprintf(stderr, "CHANGE_SIGN"); break;
+            case AST_LIST:  {
+            
+                fprintf(stderr, "LIST\n"); 
+                
+                char* bufferA = toOutput(node->son[0]);
+                char* bufferB = toOutput(node->son[1]);
+                
+                char* buffer = (char*)calloc(1 + strlen(bufferA) + strlen(bufferB) + 1, sizeof(char));
+                sprintf(buffer, "%s\n%s", bufferA, bufferB);
+
+                return buffer;
+            }
+            
+            case ASSIGNMENT:    {
+                fprintf(stderr, "ASSIGNMENT\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer3 = toOutput(node->son[2]);
+
+                char* buffer = (char*)calloc(8 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
+				sprintf(buffer,"%s : %s = %s ;",buffer1, buffer2, buffer3);
+
+                return buffer;
+
+            }
+            case AST_BYTE:  return "byte";
+            case AST_SHORT: return "short";
+            case AST_LONG:  return "long";
+            case AST_FLOAT: return "float";
+            case AST_DOUBLE:    return "double";
+            case LITERAL: {
+
+                char* buffer = (char*)calloc(strlen(node->symbol->key+1), sizeof(char));
+                sprintf(buffer, "%s", node->symbol->key);
+                return buffer;
+            }
+            // case TOKEN:         fprintf(stderr, "TOKEN"); break;
+            case ASSIGNMENT_LIST:  {
+
+                fprintf(stderr, "ASSIGNMENT_LIST"); 
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer3 = toOutput(node->son[2]);
+                char* buffer4 = toOutput(node->son[3]);
+
+                char* buffer = (char*)calloc(7 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3) + strlen(buffer4), sizeof(char));
+				sprintf(buffer,"%s : %s[%s] %s;",buffer1, buffer2, buffer3, buffer4);
+
+                return buffer;
+
+            } 
+            case VALUE_LIST:    {
+
+                fprintf(stderr, "VALUE_LIST"); 
+                
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer;
+
+                if(node->son[1] != 0) {
+                    
+                    buffer = (char*)calloc(1 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    sprintf(buffer,"%s %s",buffer1, buffer2);
+
+                } else {
+
+                    buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                    sprintf(buffer,"%s",buffer1);
+                }
+                
+                return buffer;
+
+            }   
+            case FUNCTION:  {
+
+                fprintf(stderr, "FUNCTION\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+
+                char* buffer = (char*)calloc(7 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+				sprintf(buffer,"%s\n%s",buffer1, buffer2);
+
+                return buffer;
+
+            }   
+            case FUNCTION_HEADER:   {
+
+                fprintf(stderr, "FUNCTION_HEADER\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer3 = toOutput(node->son[2]);
+                
+                char* buffer = (char*)calloc(10 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
+				sprintf(buffer,"( %s ) %s ( %s )",buffer1, buffer2, buffer3);
+
+                return buffer;
+            }   
+            case ARG_LIST:  {
+
+                fprintf(stderr, "ARG_LIST\n");
+                
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer;
+
+                if(node->son[1]) {
+
+                    buffer = (char*)calloc(2 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    sprintf(buffer,"%s, %s",buffer1, buffer2);
+
+                } else {
+
+                    buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                    sprintf(buffer,"%s",buffer1);
+                }
+                
+                return buffer;
+            }      
+            case ARGUMENT:  {
+
+                fprintf(stderr, "ARGUMENT\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                
+                char* buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+				sprintf(buffer,"%s : %s",buffer1, buffer2);
+
+                return buffer;
+
+            }      
+            case FUNCTION_BODY: {
+
+                fprintf(stderr, "FUNCTION_BODY\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                
+                char* buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                
+                sprintf(buffer,"%s",buffer1);
+
+                return buffer;
+            }     
+            case ASSIGNMENT_LIST_INDEX: {
+
+                fprintf(stderr, "ASSIGNMENT_LIST_INDEX\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+
+                char* buffer = (char*)calloc(8 + strlen(buffer1) + strlen(buffer2) + strlen(node->symbol->key), sizeof(char));
+                
+                sprintf(buffer,"%s [ %s ] = %s",node->symbol->key, buffer1, buffer2);
+
+                return buffer;
+            } 
+            // case READ_CMD:      fprintf(stderr, "READ_CMD"); break;
+            case PRINT_CMD: {
+
+                fprintf(stderr, "PRINT_CMD\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+
+                char* buffer = (char*)calloc(6 + strlen(buffer1), sizeof(char));
+                
+                sprintf(buffer,"print %s", buffer1);
+
+                return buffer;
+
+            }     
+            case RETURN_CMD:    {
+
+                fprintf(stderr, "RETURN_CMD\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                
+                char* buffer = (char*)calloc(7 + strlen(buffer1), sizeof(char));
+                
+                sprintf(buffer,"return %s",buffer1);
+
+                return buffer;
+            }    
+            // case IF_THEN_ELSE_CMD: fprintf(stderr, "IF_THEN_ELSE_CMD"); break;
+            // case WHILE_CMD:     fprintf(stderr, "WHILE_CMD"); break;
+            case PRINT_CONTENT: {
+
+                fprintf(stderr, "PRINT_CONTENT\n");
+
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer;
+
+                if(node->son[1] != 0) {
+
+                    buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    sprintf(buffer,"%s, %s",buffer1, buffer2);
+
+                } else {
+
+                    buffer = (char*)calloc(1 + strlen(buffer1), sizeof(char));
+                    sprintf(buffer,"%s",buffer1);
+                } 
+                
+                return buffer;
+
+            } 
+            case AST_CMD_BLOCK: {
+
+                fprintf(stderr, "AST_CMD_BLOCK\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                                
+                char* buffer = (char*)calloc(4 + strlen(buffer1), sizeof(char));
+                                
+                sprintf(buffer,"{ %s }",buffer1);
+                
+                return buffer;
+            } 
+            case AST_CMD_LIST:  {
+                
+                fprintf(stderr, "AST_CMD_LIST\n");
+
+                // fprintf(stderr, "CARALHOOOOO: %d\n", node->son[1]);
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+                char* buffer;
+
+                // fprintf(stderr, "DEBUG: %s\n", buffer1);
+                // fprintf(stderr, "DEBUG: %s\n", buffer2);
+
+                if(node->son[1] != 0) {
+
+                    buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    sprintf(buffer,"%s ;\n %s",buffer1, buffer2);
+
+                } else {
+
+                    buffer = (char*)calloc(1 + strlen(buffer1), sizeof(char));
+                    sprintf(buffer,"%s\n",buffer1);
+                } 
+                
+                // fprintf(stderr, "DEBUG: %s\n", buffer);
+                return buffer;
+            }
+            // case AST_FUN_CAL:   fprintf(stderr, "AST_FUN_CAL"); break;
+            case AST_AT_ARRAY: {
+                
+                fprintf(stderr, "AST_AT_ARRAY\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                
+                char* buffer = (char*)calloc(4 + strlen(buffer1), sizeof(char));
+                
+                sprintf(buffer,"[ %s ]",buffer1);
+
+                return buffer;
+
+            }
+            case AST_SYMBOL_ASSIGNMENT: {
+
+                fprintf(stderr, "AST_SYMBOL_ASSIGNMENT\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                                
+                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(node->symbol->key), sizeof(char));
+                                
+                sprintf(buffer,"%s = %s",node->symbol->key, buffer1);
+                
+                return buffer;
+
+            } 
+            case AST_SUB:   {
+
+                fprintf(stderr, "AST_SUB\n");
+
+                char* buffer1 = toOutput(node->son[0]);
+                char* buffer2 = toOutput(node->son[1]);
+
+                char* buffer = (char*)calloc(1 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                
+                sprintf(buffer,"%s-%s", buffer1, buffer2);
+
+                return buffer;
+            }       
+            // case AST_DIV:       fprintf(stderr, "AST_DIV"); break;
+            // case AST_LESS:      fprintf(stderr, "AST_LESS"); break;
+            // case AST_GREA:      fprintf(stderr, "AST_GREA"); break;
+            // case AST_PARAM_LIST:    fprintf(stderr, "AST_PARAM_LIST"); break;
+            // case GE:        fprintf(stderr, "GE"); break;
+            // case LE:        fprintf(stderr, "LE"); break;
+            // case EQUAL:        fprintf(stderr, "EQUAL"); break;
+            // case NOT_EQUAL:        fprintf(stderr, "NOT_EQUAL"); break;
+            // case OR:        fprintf(stderr, "OR"); break;
+            // case AND:        fprintf(stderr, "AND"); break;
+            case PARENTESES:    {
+
+                char* buffer1 = toOutput(node->son[0]);
+                
+                char* buffer = (char*)calloc(4 + strlen(buffer1), sizeof(char));
+				sprintf(buffer,"( %s )",buffer1);
+
+                return buffer;
+            }
+
+            default:       fprintf(stderr, "NAO ACHOU...\n"); return "";
+        }
+
+    }
+}
+
 void astPrint(AST* node, int level) {
 
     if(node) {
@@ -72,6 +435,8 @@ void astPrint(AST* node, int level) {
             case NOT_EQUAL:        fprintf(stderr, "NOT_EQUAL"); break;
             case OR:        fprintf(stderr, "OR"); break;
             case AND:        fprintf(stderr, "AND"); break;
+            case PARENTESES:    fprintf(stderr, "PARENTESES"); break;
+            case AST_SYMBOL_ARRAY:  fprintf(stderr, "AST_SYMBOL_ARRAY"); break;
             
 
             default:       fprintf(stderr, "UNKNOWN");

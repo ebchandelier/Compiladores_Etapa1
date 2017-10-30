@@ -59,7 +59,7 @@ HashEntry *createPair(char *key, int value) {
 }
 
 /* Insert a key-value pair into a hash table. */
-void setHashValue(HashTable *hashtable, char *key, int value) {
+HashEntry *setHashValue(HashTable *hashtable, char *key, int value) {
 	int bin = 0;
 	HashEntry *newpair = NULL;
 	HashEntry *next = NULL;
@@ -82,6 +82,7 @@ void setHashValue(HashTable *hashtable, char *key, int value) {
 	if( next != NULL && next->key != NULL && strcmp( key, next->key ) == 0 ) {
 
 		next->value = value;
+		return next;
 
 	/* Nope, could't find it.  Time to grow a pair. */
 	} else {
@@ -101,6 +102,7 @@ void setHashValue(HashTable *hashtable, char *key, int value) {
 			newpair->next = next;
 			last->next = newpair;
 		}
+		return newpair;
 	}
 }
 

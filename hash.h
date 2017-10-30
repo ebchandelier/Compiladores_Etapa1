@@ -35,7 +35,7 @@ int ht_hash( HashTable *hashtable, char *key ) ;
 
 HashEntry *createPair(char *key, int value) ;
 
-void setHashValue(HashTable *hashtable, char *key, int value);
+HashEntry *setHashValue(HashTable *hashtable, char *key, int value);
 
 void printHash(HashTable *hashtable);
 	

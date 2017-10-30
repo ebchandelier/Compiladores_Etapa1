@@ -46,6 +46,8 @@
 #define NOT_EQUAL 41
 #define OR 42
 #define AND 43
+#define PARENTESES 44
+#define AST_SYMBOL_ARRAY 45
 
 //problem....use enum?
 
@@ -58,5 +60,6 @@ typedef struct ast_node {
 
 AST* astCreate(int type, HashEntry* symbol, AST* son1, AST* son2, AST* son3, AST* son4);
 void astPrint(AST* node, int level);
+char* toOutput(AST* ast);
 
 #endif

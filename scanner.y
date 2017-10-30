@@ -93,10 +93,10 @@ program:
 	;
 
 vardec:
-	TK_IDENTIFIER ':' type '=' value ';'	{$$ = astCreate(ASSIGNMENT, 0, astCreate(TOKEN, $1, 0, 0, 0, 0), $3, $5, 0);}
+	TK_IDENTIFIER ':' type '=' value ';'	{$$ = astCreate(ASSIGNMENT, 0, astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), $3, $5, 0);}
 	| TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' valuelist ';' {$$ = astCreate(ASSIGNMENT_LIST, 
 																0, 
-																astCreate(TOKEN, $1, 0, 0, 0, 0), 
+																astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), 
 																$3, 
 																astCreate(AST_SYMBOL, $5, 0, 0, 0, 0), 
 																$7);}
@@ -105,7 +105,7 @@ vardec:
 expr:
     LIT_INTEGER { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0);}
     | funcall	{ $$ = $1; }	
-    | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL, $1, $2, 0, 0, 0);}
+    | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL_ARRAY, $1, $2, 0, 0, 0);}
     | '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
     | expr '+' expr	{ $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0);}
     | expr '-' expr { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0);}
@@ -117,7 +117,7 @@ expr:
     | expr OPERATOR_LE expr  { $$ = astCreate(LE, 0, $1, $3, 0, 0); }
     | expr OPERATOR_NE expr  { $$ = astCreate(NOT_EQUAL, 0, $1, $3, 0, 0); }
     | expr OPERATOR_EQ expr  { $$ = astCreate(EQUAL, 0, $1, $3, 0, 0); }
-    | '(' expr ')'  { $$ = $2; }
+    | '(' expr ')'  { $$ = astCreate(PARENTESES, 0, $2, 0, 0, 0); }
     | expr OPERATOR_OR expr { $$ = astCreate(OR, 0, $1, $3, 0, 0); }
     | expr OPERATOR_AND expr { $$ = astCreate(AND, 0, $1, $3, 0, 0); }
     ;
@@ -140,7 +140,7 @@ cmd:
 	| KW_IF '(' expr ')' KW_THEN cmd elseCmd { $$ = astCreate(IF_THEN_ELSE_CMD, 0, $3, $6, $7, 0);}
 	| KW_WHILE '(' expr ')' cmd { $$ = astCreate(WHILE_CMD, 0, $3, $5, 0, 0); }
     | cmdblock	{ $$ = $1; }
-    |	{ $$ = 0; }
+    |	{ fprintf(stderr, "VAZIU CMD\n"); $$ = 0; }
 	;
 
 printableList:
@@ -239,7 +239,7 @@ cmdlist:
 
 optcmd:
 	';' cmd optcmd	{ $$ = astCreate(AST_CMD_LIST, 0, $2, $3, 0, 0); }
-	|	{ $$ = 0; }
+	|	{ fprintf(stderr, "VAZIU OPTCMD\n"); $$ = 0; }
 	;
 
 
