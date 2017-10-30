@@ -22,17 +22,18 @@ int main(int argc, char** argv) {
 	
 	initMe();
 	
-	yyin = fopen(argv[1], "r");
+	//yyin = fopen(argv[1], "r");
+	yyin = fopen("a.txt", "r");
 	
 	yyparse();
 	
 	fclose(yyin);
 
-	astPrint(astRoot,0);
+	//astPrint(astRoot,0);
 
-	char* outuputFile = toOutput(astRoot);
+	//char* outuputFile = toOutput(astRoot);
 
-	WriteToFile(argv[2],outuputFile);
+	//WriteToFile(argv[2],outuputFile);
 
 	return 0;
 }

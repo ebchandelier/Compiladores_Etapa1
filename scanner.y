@@ -77,7 +77,7 @@
 %type<ast> param
 %type<ast> optparam
 
-%left '<' '>' OPERATOR_GE OPERATOR_LE OPERATOR_NE OPERATOR_EQ
+%left '<' '>' OPERATOR_GE OPERATOR_LE OPERATOR_NE OPERATOR_EQ OPERATOR_AND OPERATOR_OR
 %left '+' '-'
 %left '*' '/'
 
@@ -104,6 +104,7 @@ vardec:
 
 expr:
     LIT_INTEGER { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0);}
+    | LIT_CHAR { } //do something
     | funcall	{ $$ = $1; }	
     | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL_ARRAY, $1, $2, 0, 0, 0);}
     | '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
@@ -145,7 +146,6 @@ cmd:
 
 printableList:
 	printable optPrintable { $$ = astCreate(PRINT_CONTENT, 0, $1, $2, 0, 0); }
-	|	{ $$ = 0; }
 	;
 
 printable:
