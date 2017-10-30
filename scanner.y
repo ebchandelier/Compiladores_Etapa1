@@ -77,9 +77,10 @@
 %type<ast> param
 %type<ast> optparam
 
-%left '<' '>' OPERATOR_GE OPERATOR_LE OPERATOR_NE OPERATOR_EQ
+%left '<' '>' OPERATOR_GE OPERATOR_LE OPERATOR_NE OPERATOR_EQ OPERATOR_AND OPERATOR_OR
 %left '+' '-'
 %left '*' '/'
+
 
 %%
 
