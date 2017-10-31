@@ -28,7 +28,7 @@ char* toOutput(AST* node) {
                 
                 fprintf(stderr, "AST_SYMBOL\n");                
                 
-                char* buffer = (char*)calloc(strlen(node->symbol->key+1), sizeof(char));
+                char* buffer = (char*)calloc(strlen(node->symbol->key)+1, sizeof(char));
                 sprintf(buffer, "%s", node->symbol->key);
                 return buffer;
             }
@@ -60,7 +60,7 @@ char* toOutput(AST* node) {
             }       
             case AST_MUL:   {
 
-                fprintf(stderr, "MUL"); break;
+                fprintf(stderr, "MUL");
 
                 char* bufferA = toOutput(node->son[0]);
                 char* bufferB = toOutput(node->son[1]);
@@ -72,12 +72,14 @@ char* toOutput(AST* node) {
             }       
             case AST_CHANGE_SIGN:   {
 
-                fprintf(stderr, "CHANGE_SIGN"); break;
-
+                fprintf(stderr, "CHANGE_SIGN"); 
+		
                 char* bufferA = toOutput(node->son[0]);
-                
+							
                 char* buffer = (char*)calloc(1 + strlen(bufferA), sizeof(char));
                 sprintf(buffer, "-%s", bufferA);
+
+
 
                 return buffer;
             }   
@@ -114,7 +116,7 @@ char* toOutput(AST* node) {
             case AST_DOUBLE:    return "double";
             case LITERAL: {
 
-                char* buffer = (char*)calloc(strlen(node->symbol->key+1), sizeof(char));
+                char* buffer = (char*)calloc(strlen(node->symbol->key)+1, sizeof(char));
                 sprintf(buffer, "%s", node->symbol->key);
                 return buffer;
             }
