@@ -39,7 +39,7 @@ char* toOutput(AST* node) {
 
                 char* bufferA = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(2 + strlen(bufferA) + strlen(node->symbol->key), sizeof(char));
+                char* buffer = (char*)calloc(1 + strlen(bufferA) + strlen(node->symbol->key), sizeof(char));
                 sprintf(buffer, "%s%s", node->symbol->key, bufferA);
 
                 return buffer;
@@ -52,7 +52,7 @@ char* toOutput(AST* node) {
                 char* bufferA = toOutput(node->son[0]);
                 char* bufferB = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(3 + strlen(bufferA) + strlen(bufferB) + 1, sizeof(char));
+                char* buffer = (char*)calloc(4 + strlen(bufferA) + strlen(bufferB), sizeof(char));
                 sprintf(buffer, "%s + %s", bufferA, bufferB);
 
                 return buffer;
@@ -65,7 +65,7 @@ char* toOutput(AST* node) {
                 char* bufferA = toOutput(node->son[0]);
                 char* bufferB = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(3 + strlen(bufferA) + strlen(bufferB) + 1, sizeof(char));
+                char* buffer = (char*)calloc(4 + strlen(bufferA) + strlen(bufferB), sizeof(char));
                 sprintf(buffer, "%s * %s", bufferA, bufferB);
 
                 return buffer;
@@ -76,7 +76,7 @@ char* toOutput(AST* node) {
 		
                 char* bufferA = toOutput(node->son[0]);
 							
-                char* buffer = (char*)calloc(1 + strlen(bufferA), sizeof(char));
+                char* buffer = (char*)calloc(2 + strlen(bufferA), sizeof(char));
                 sprintf(buffer, "-%s", bufferA);
 
 
@@ -90,7 +90,7 @@ char* toOutput(AST* node) {
                 char* bufferA = toOutput(node->son[0]);
                 char* bufferB = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(1 + strlen(bufferA) + strlen(bufferB) + 1, sizeof(char));
+                char* buffer = (char*)calloc(2 + strlen(bufferA) + strlen(bufferB), sizeof(char));
                 sprintf(buffer, "%s\n%s", bufferA, bufferB);
 
                 return buffer;
@@ -103,7 +103,7 @@ char* toOutput(AST* node) {
                 char* buffer2 = toOutput(node->son[1]);
                 char* buffer3 = toOutput(node->son[2]);
 
-                char* buffer = (char*)calloc(8 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
+                char* buffer = (char*)calloc(9 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
 				sprintf(buffer,"%s : %s = %s ;",buffer1, buffer2, buffer3);
 
                 return buffer;
@@ -146,12 +146,12 @@ char* toOutput(AST* node) {
 
                 if(node->son[1] != 0) {
                     
-                    buffer = (char*)calloc(1 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    buffer = (char*)calloc(2 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                     sprintf(buffer,"%s %s",buffer1, buffer2);
 
                 } else {
 
-                    buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                    buffer = (char*)calloc(strlen(buffer1)+1, sizeof(char));
                     sprintf(buffer,"%s",buffer1);
                 }
                 
@@ -165,7 +165,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
 
-                char* buffer = (char*)calloc(7 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(2 + strlen(buffer1) + strlen(buffer2), sizeof(char));
 				sprintf(buffer,"%s\n%s",buffer1, buffer2);
 
                 return buffer;
@@ -179,7 +179,7 @@ char* toOutput(AST* node) {
                 char* buffer2 = toOutput(node->son[1]);
                 char* buffer3 = toOutput(node->son[2]);
                 
-                char* buffer = (char*)calloc(10 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
+                char* buffer = (char*)calloc(11 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
 				sprintf(buffer,"( %s ) %s ( %s )",buffer1, buffer2, buffer3);
 
                 return buffer;
@@ -194,12 +194,12 @@ char* toOutput(AST* node) {
 
                 if(node->son[1]) {
 
-                    buffer = (char*)calloc(2 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                     sprintf(buffer,"%s, %s",buffer1, buffer2);
 
                 } else {
 
-                    buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                    buffer = (char*)calloc(strlen(buffer1)+1, sizeof(char));
                     sprintf(buffer,"%s",buffer1);
                 }
                 
@@ -212,7 +212,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
 				sprintf(buffer,"%s : %s",buffer1, buffer2);
 
                 return buffer;
@@ -224,7 +224,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(strlen(buffer1)+1, sizeof(char));
                 
                 sprintf(buffer,"%s",buffer1);
 
@@ -237,7 +237,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
 
-                char* buffer = (char*)calloc(8 + strlen(buffer1) + strlen(buffer2) + strlen(node->symbol->key), sizeof(char));
+                char* buffer = (char*)calloc(9 + strlen(buffer1) + strlen(buffer2) + strlen(node->symbol->key), sizeof(char));
                 
                 sprintf(buffer,"%s [ %s ] = %s",node->symbol->key, buffer1, buffer2);
 
@@ -249,7 +249,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(7 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(8 + strlen(buffer1), sizeof(char));
                                 
                 sprintf(buffer,"read > %s", buffer1);
                 
@@ -261,7 +261,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
 
-                char* buffer = (char*)calloc(6 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(7 + strlen(buffer1), sizeof(char));
                 
                 sprintf(buffer,"print %s", buffer1);
 
@@ -274,7 +274,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(7 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(8 + strlen(buffer1), sizeof(char));
                 
                 sprintf(buffer,"return %s",buffer1);
 
@@ -288,7 +288,7 @@ char* toOutput(AST* node) {
                 char* buffer2 = toOutput(node->son[1]);
                 char* buffer3 = toOutput(node->son[2]);
                 
-                char* buffer = (char*)calloc(14 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
+                char* buffer = (char*)calloc(15 + strlen(buffer1) + strlen(buffer2) + strlen(buffer3), sizeof(char));
                 
                 sprintf(buffer,"if ( %s ) then %s %s",buffer1, buffer2, buffer3);
 
@@ -300,7 +300,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(14 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(6 + strlen(buffer1), sizeof(char));
                 
                 sprintf(buffer,"else %s",buffer1);
 
@@ -314,7 +314,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
 
-                char* buffer = (char*)calloc(8 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(9 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                 
                 sprintf(buffer,"while(%s) %s", buffer1, buffer2);
 
@@ -332,7 +332,7 @@ char* toOutput(AST* node) {
 
                 if(node->son[1] != 0) {
 
-                    buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                     sprintf(buffer,"%s, %s",buffer1, buffer2);
 
                 } else {
@@ -350,7 +350,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1), sizeof(char));
                                 
                 sprintf(buffer,"{ %s }",buffer1);
                 
@@ -366,12 +366,12 @@ char* toOutput(AST* node) {
 
                 if(node->son[1] != 0) {
 
-                    buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                     sprintf(buffer,"%s ;\n %s",buffer1, buffer2);
 
                 } else {
 
-                    buffer = (char*)calloc(1 + strlen(buffer1), sizeof(char));
+                    buffer = (char*)calloc(2 + strlen(buffer1), sizeof(char));
                     sprintf(buffer,"%s\n",buffer1);
                 } 
                 
@@ -383,7 +383,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(node->symbol->key), sizeof(char));
+                char* buffer = (char*)calloc(6 + strlen(buffer1) + strlen(node->symbol->key), sizeof(char));
                 
                 sprintf(buffer,"%s ( %s )",node->symbol->key, buffer1);
 
@@ -395,7 +395,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1), sizeof(char));
                 
                 sprintf(buffer,"[ %s ]",buffer1);
 
@@ -420,7 +420,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
 
-                char* buffer = (char*)calloc(1 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(2 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                 
                 sprintf(buffer,"%s-%s", buffer1, buffer2);
 
@@ -433,7 +433,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s / %s", buffer1, buffer2);
                 
@@ -446,7 +446,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
 
-                char* buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                 
                 sprintf(buffer,"%s < %s", buffer1, buffer2);
 
@@ -459,7 +459,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s > %s", buffer1, buffer2);
                 
@@ -475,12 +475,12 @@ char* toOutput(AST* node) {
 
                 if(node->son[1] != 0) {
 
-                    buffer = (char*)calloc(2 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                    buffer = (char*)calloc(3 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                     sprintf(buffer,"%s, %s",buffer1, buffer2);
 
                 } else {
 
-                    buffer = (char*)calloc(strlen(buffer1), sizeof(char));
+                    buffer = (char*)calloc(strlen(buffer1)+2, sizeof(char));
                     sprintf(buffer,"%s\n",buffer1);
                 } 
                 
@@ -494,7 +494,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s >= %s", buffer1, buffer2);
                 
@@ -507,7 +507,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s <= %s", buffer1, buffer2);
                 
@@ -520,7 +520,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s == %s", buffer1, buffer2);
                 
@@ -533,7 +533,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s != %s", buffer1, buffer2);
                 
@@ -546,7 +546,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s || %s", buffer1, buffer2);
                 
@@ -559,7 +559,7 @@ char* toOutput(AST* node) {
                 char* buffer1 = toOutput(node->son[0]);
                 char* buffer2 = toOutput(node->son[1]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1) + strlen(buffer2), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1) + strlen(buffer2), sizeof(char));
                                 
                 sprintf(buffer,"%s && %s", buffer1, buffer2);
                 
@@ -569,7 +569,7 @@ char* toOutput(AST* node) {
 
                 char* buffer1 = toOutput(node->son[0]);
                 
-                char* buffer = (char*)calloc(4 + strlen(buffer1), sizeof(char));
+                char* buffer = (char*)calloc(5 + strlen(buffer1), sizeof(char));
 				sprintf(buffer,"( %s )",buffer1);
 
                 return buffer;
