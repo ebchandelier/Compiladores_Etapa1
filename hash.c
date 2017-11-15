@@ -40,7 +40,7 @@ int ht_hash( HashTable *hashtable, char *key ) {
 }
 
 /* Create a key-value pair. */
-HashEntry *createPair(char *key, SymbolData *value) {
+HashEntry *createPair(char *key, int value) {
 	HashEntry *newpair;
 
 	if( ( newpair = malloc( sizeof( HashEntry ) ) ) == NULL ) {
@@ -59,11 +59,15 @@ HashEntry *createPair(char *key, SymbolData *value) {
 }
 
 /* Insert a key-value pair into a hash table. */
-HashEntry *setHashValue(HashTable *hashtable, char *key, SymbolData *value) {
+HashEntry *setHashValue(HashTable *hashtable, char *key, int value) {
 	int bin = 0;
 	HashEntry *newpair = NULL;
 	HashEntry *next = NULL;
 	HashEntry *last = NULL;
+
+	if (key[0] == 'P'){
+		printf("hehere\n");
+	}
 
 	bin = ht_hash( hashtable, key );
 
@@ -111,33 +115,30 @@ void printHash(HashTable *hashtable){
 		if (current == NULL)
 			continue;
 
-		printf("[%d] key = %s\n", i, current->key);
+		printf("[%d] key = %s     value = %d\n", i, current->key, current->value);
 	}
 }
 
 /* Retrieve a key-value pair from a hash table. */
-HashEntry *getHashValue(HashTable *hashtable, char *key) {
+int getHashValue(HashTable *hashtable, char *key) {
 	int bin = 0;
 	HashEntry *pair;
-	HashEntry *new;
 
 	bin = ht_hash( hashtable, key );
 
 	/* Step through the bin, looking for our value. */
 	pair = hashtable->table[ bin ];
 	while( pair != NULL && pair->key != NULL && strcmp( key, pair->key ) > 0 ) {
-		//printf("%s = %d\n", key, pair->value);
+		printf("%s = %d\n", key, pair->value);		
 		pair = pair->next;
 	}
 
 	/* Did we actually find anything? */
 	if( pair == NULL || pair->key == NULL || strcmp( key, pair->key ) != 0 ) {
-		return NULL;
+		return -1;
 
 	} else {
-		new = (HashEntry*)malloc(sizeof(HashEntry));
-		memcpy((void*)new, (void*)pair, sizeof(HashEntry));
-		return new;
+		return pair->value;
 	}
 	
 }
