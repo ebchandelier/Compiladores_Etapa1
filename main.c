@@ -1,3 +1,5 @@
+#include "semantic.h"
+
 extern FILE *yyin;
 
 int WriteToFile(char* path, char* content)
@@ -31,9 +33,11 @@ int main(int argc, char** argv) {
 
 	//astPrint(astRoot,0);
 
-	char* outputFile = toOutput(astRoot);
+	//char* outputFile = toOutput(astRoot);
+	//WriteToFile(argv[2],outputFile);
 
-	WriteToFile(argv[2],outputFile);
+	//ETAPA 4: test semantic
+
 
 	return 0;
 }

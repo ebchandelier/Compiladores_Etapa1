@@ -10,10 +10,10 @@
 
 
 etapa1:etapa2 lex.yy.c
-	gcc -o etapa3 ast.c lex.yy.c y.tab.c 
+	gcc -o etapa4 ast.c lex.yy.c y.tab.c semantic.c
 
-etapa2: scanner.y
-	yacc -d scanner.y
+etapa2: parser.y
+	yacc -d parser.y
 
 lex.yy.c: scanner.l
 	lex scanner.l
