@@ -1,5 +1,3 @@
-#include "semantic.h"
-
 extern FILE *yyin;
 
 int WriteToFile(char* path, char* content)

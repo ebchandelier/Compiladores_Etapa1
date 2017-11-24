@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
+#include "semantic.h"
 
-#define SYMBOL_LIT_INTEGER		1
 #define SYMBOL_LIT_REAL			2
 #define SYMBOL_LIT_CHAR			3
 #define SYMBOL_LIT_STRING		4
@@ -14,31 +14,19 @@
 #define SYMBOL_FUN_IDENTIFIER	6
 #define SYMBOL_VAR_IDENTIFIER	7
 
-struct hash_table_entry {
-	char *key;
-	int value;
-	struct hash_table_entry *next;
-};
 
-typedef struct hash_table_entry HashEntry;
+HashTable *createHashTable(int size);
 
-struct HashTable_s {
-	int size;
-	struct hash_table_entry **table;
-};
+int ht_hash( HashTable *hashtable, char *key );
 
-typedef struct HashTable_s HashTable;
-
-HashTable *createHashTable(int size) ;
-
-int ht_hash( HashTable *hashtable, char *key ) ;
-
-HashEntry *createPair(char *key, int value) ;
+HashEntry *createPair(char *key, int value);
 
 HashEntry *setHashValue(HashTable *hashtable, char *key, int value);
 
+HashEntry *setHashData(HashTable *hashtable, char *key, SymbolData *value);
+
 void printHash(HashTable *hashtable);
-	
-int getHashValue(HashTable *hashtable, char *key);
+
+SymbolData *getHashValue(HashTable *hashtable, char *key);
 
 #endif

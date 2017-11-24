@@ -51,7 +51,8 @@ HashEntry *createPair(char *key, int value) {
 		return NULL;
 	}
 
-	newpair->value = value;
+	newpair->value = malloc(sizeof(SymbolData));
+	newpair->value->value.lit_int = value;
 
 	newpair->next = NULL;
 
@@ -65,10 +66,6 @@ HashEntry *setHashValue(HashTable *hashtable, char *key, int value) {
 	HashEntry *next = NULL;
 	HashEntry *last = NULL;
 
-	if (key[0] == 'P'){
-		printf("hehere\n");
-	}
-
 	bin = ht_hash( hashtable, key );
 
 	next = hashtable->table[ bin ];
@@ -81,7 +78,7 @@ HashEntry *setHashValue(HashTable *hashtable, char *key, int value) {
 	/* There's already a pair.  Let's replace that string. */
 	if( next != NULL && next->key != NULL && strcmp( key, next->key ) == 0 ) {
 
-		next->value = value;
+		next->value->value.lit_int = value;
 		return next;
 
 	/* Nope, could't find it.  Time to grow a pair. */
@@ -115,12 +112,12 @@ void printHash(HashTable *hashtable){
 		if (current == NULL)
 			continue;
 
-		printf("[%d] key = %s     value = %d\n", i, current->key, current->value);
+		printf("[%d] key = %s     value = %d\n", i, current->key, current->value->value.lit_int);
 	}
 }
 
 /* Retrieve a key-value pair from a hash table. */
-int getHashValue(HashTable *hashtable, char *key) {
+SymbolData *getHashValue(HashTable *hashtable, char *key) {
 	int bin = 0;
 	HashEntry *pair;
 
@@ -129,13 +126,13 @@ int getHashValue(HashTable *hashtable, char *key) {
 	/* Step through the bin, looking for our value. */
 	pair = hashtable->table[ bin ];
 	while( pair != NULL && pair->key != NULL && strcmp( key, pair->key ) > 0 ) {
-		printf("%s = %d\n", key, pair->value);		
+		printf("%s = %d\n", key, pair->value->value.lit_int);		
 		pair = pair->next;
 	}
 
 	/* Did we actually find anything? */
 	if( pair == NULL || pair->key == NULL || strcmp( key, pair->key ) != 0 ) {
-		return -1;
+		return NULL;
 
 	} else {
 		return pair->value;

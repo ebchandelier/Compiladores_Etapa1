@@ -1,7 +1,7 @@
 #ifndef ASTREE_HEADER
 #define ASTREE_HEADER
 
-#include "hash.h"
+#include "semantic.h"
 
 #define AST_SYMBOL 1
 #define AST_ADD 2
@@ -51,13 +51,6 @@
 #define ELSE_CMD 46
 
 //problem....use enum?
-
-typedef struct ast_node {
-
-    int type;
-    HashEntry *symbol;
-    struct ast_node* son[4];
-} AST;
 
 AST* astCreate(int type, HashEntry* symbol, AST* son1, AST* son2, AST* son3, AST* son4);
 void astPrint(AST* node, int level);
