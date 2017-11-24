@@ -14,20 +14,24 @@
 #define SYMBOL_FUN_IDENTIFIER	6
 #define SYMBOL_VAR_IDENTIFIER	7
 
+#include "ast.h"
+
 struct hash_table_entry {
-	char *key;
-	int value;
+    char *key;
+    int value;
+    AST *declarationNode;
 	struct hash_table_entry *next;
 };
 
 typedef struct hash_table_entry HashEntry;
 
 struct HashTable_s {
-	int size;
+    int size;
 	struct hash_table_entry **table;
 };
 
 typedef struct HashTable_s HashTable;
+
 
 HashTable *createHashTable(int size) ;
 
