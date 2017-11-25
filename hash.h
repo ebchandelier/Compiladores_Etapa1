@@ -25,6 +25,7 @@ struct hash_table_entry {
     int defined;
     int nature;
     int dataType;
+    int returnType;
 	struct hash_table_entry *next;
 };
 
