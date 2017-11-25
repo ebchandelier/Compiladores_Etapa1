@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "semantic.h"
+#include"y.tab.h"
 
 void firstPass(AST *node) {
     //verify declarations os variables, lists and functions,
@@ -36,22 +37,30 @@ void firstPass(AST *node) {
                         case AST_SHORT:
                         case AST_LONG: {
                            
-                            hashNode->dataType = DATA_TYPE_INTEGER;
+                            hashNode->dataType = LIT_INTEGER;
                             break;  
                         } 
                         case AST_FLOAT:
                         case AST_DOUBLE: {
 
-                            hashNode->dataType = DATA_TYPE_REAL;
+                            hashNode->dataType = LIT_REAL;
                             break;
                         }
                     }
 
                     HashEntry *hashNodeRightSide = node->son[2]->symbol;//right side of the operation
-                    if( hashNode->value != hashNodeRightSide->dataType ) {
+                    
+                    int litType = hashNodeRightSide->value; 
+                    if(litType == LIT_CHAR) {
 
-                        fprintf(stderr, "%d and %d\n",hashNode->value, hashNodeRightSide->value);
-                        fprintf(stderr, "ERRO Semantico, tipos incompatíveis na declaração.\n");
+                        litType = LIT_INTEGER;
+                    }
+
+                    if( hashNode->dataType != litType ) {
+
+                        fprintf(stderr, "%d and %d\n",hashNode->dataType, litType);
+                        fprintf(stderr, "ERRO Semantico, var: %s, tipos incompatíveis na declaração.\n",
+                                        hashNode->key);
                     } else {
 
                         fprintf(stderr, "Tudo certo com os tipos.\n");

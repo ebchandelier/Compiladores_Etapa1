@@ -49,9 +49,9 @@ return		return KW_RETURN;
 
 {identifier}					{yylval.symbol = setHashValue( hashtable, yytext, SYMBOL_TK_IDENTIFIER );return TK_IDENTIFIER;}
 
-({digit})+						{yylval.symbol = setHashValue( hashtable, yytext, SYMBOL_LIT_INTEGER); return LIT_INTEGER;}
-({digit})+(".")({digit})+		{yylval.symbol = setHashValue( hashtable, yytext, SYMBOL_LIT_REAL); return LIT_REAL;}
-(\')(.)(\')						{yylval.symbol = setHashValue( hashtable, yytext, SYMBOL_LIT_CHAR);return LIT_CHAR;}
+({digit})+						{yylval.symbol = setHashValue( hashtable, yytext, LIT_INTEGER); return LIT_INTEGER;}
+({digit})+(".")({digit})+		{yylval.symbol = setHashValue( hashtable, yytext, LIT_REAL); return LIT_REAL;}
+(\')(.)(\')						{yylval.symbol = setHashValue( hashtable, yytext, LIT_CHAR);return LIT_CHAR;}
 ((\")([^\"]|(\\\"))*(\"))		{yylval.symbol = setHashValue( hashtable, yytext, SYMBOL_LIT_STRING);return LIT_STRING;}
 
 [ \t]   // Ignore whitespace, tab
