@@ -10,16 +10,21 @@
 #define SYMBOL_LIT_REAL			2
 #define SYMBOL_LIT_CHAR			3
 #define SYMBOL_LIT_STRING		4
-#define SYMBOL_ARR_IDENTIFIER 	5
-#define SYMBOL_FUN_IDENTIFIER	6
-#define SYMBOL_VAR_IDENTIFIER	7
+#define SYMBOL_TK_IDENTIFIER    5
+
 
 #include "ast.h"
+
+#define TRUE 1
+#define FALSE 0
 
 struct hash_table_entry {
     char *key;
     int value;
     AST *declarationNode;
+    int defined;
+    int nature;
+    int dataType;
 	struct hash_table_entry *next;
 };
 

@@ -50,6 +50,8 @@
 
 //problem....use enum?
 
+#define TRUE 1
+#define FALSE 0
 
 typedef struct ast_node {
     

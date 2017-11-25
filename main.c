@@ -31,13 +31,13 @@ int main(int argc, char** argv) {
 	
 	fclose(yyin);
 
-	//astPrint(astRoot,0);
+	astPrint(astRoot,0);
 
 	//char* outputFile = toOutput(astRoot);
 	//WriteToFile(argv[2],outputFile);
 
 	//ETAPA 4: test semantic
-
+	firstPass(astRoot);
 
 	return 0;
 }

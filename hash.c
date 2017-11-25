@@ -52,7 +52,7 @@ HashEntry *createPair(char *key, int value) {
 	}
 
 	newpair->value = value;
-
+	newpair->defined = FALSE;
 	newpair->next = NULL;
 
 	return newpair;
@@ -66,7 +66,7 @@ HashEntry *setHashValue(HashTable *hashtable, char *key, int value) {
 	HashEntry *last = NULL;
 
 	if (key[0] == 'P'){
-		printf("hehere\n");
+		printf("kkk\n");
 	}
 
 	bin = ht_hash( hashtable, key );
