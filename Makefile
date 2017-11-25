@@ -19,4 +19,4 @@ lex.yy.c: scanner.l
 	lex scanner.l
 
 clean:
-	rm lex.yy.c etapa3 y.tab.c y.tab.h
+	rm lex.yy.c etapa4 y.tab.c y.tab.h
