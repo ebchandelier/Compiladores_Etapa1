@@ -4,6 +4,8 @@
 #include "semantic.h"
 #include"y.tab.h"
 
+int errCount = 0;
+
 void firstPass(AST *node) {
     //verify declarations os variables, lists and functions,
     //set if var/func was defined,
@@ -23,6 +25,7 @@ void firstPass(AST *node) {
                 HashEntry *hashNode = (node->son[0]->symbol);
                 if(hashNode->defined == TRUE) {
                     fprintf(stderr, "ERRO semantico na declaração de var, Variável '%s' ja declarada.\n", hashNode->key);
+                    errCount++;
                     
                 } else {
 
@@ -60,6 +63,7 @@ void firstPass(AST *node) {
 
                         fprintf(stderr, "%d and %d\n",hashNode->dataType, litType);
                         fprintf(stderr, "ERRO Semantico, var: %s, tipos incompatíveis na declaração.\n", hashNode->key);
+                        errCount++;
                     
                     }
                 }
@@ -70,6 +74,7 @@ void firstPass(AST *node) {
                 HashEntry *hashNode = (node->son[0]->symbol);
                 if(hashNode->defined == TRUE) {
                     fprintf(stderr, "ERRO semantico na declaracao de array Var '%s' ja declarada.\n", hashNode->key);
+                    errCount++;
                     
                 } else {
 
@@ -123,6 +128,7 @@ void firstPass(AST *node) {
                             if(literal_vector_type != hashNode->dataType) {
 
                                 fprintf(stderr,"SEMANTIC ERROR: Wrong type on at least one element of the array: %s\n", hashNode->key);
+                                errCount++;
                             }
 
                             literal_count++;
@@ -133,6 +139,7 @@ void firstPass(AST *node) {
                         if(expected_literal_count != literal_count)
                         {
                             fprintf(stderr,"SEMANTIC ERROR: Wrong number of elements on array declaration: %s\n", hashNode->key);
+                            errCount++;
                         }
 
                     }
@@ -148,6 +155,7 @@ void firstPass(AST *node) {
                 if(function->symbol->defined == TRUE)
                 {
                     fprintf(stderr,"SEMANTIC ERROR: Function %s is already defined\n", function->symbol->key);
+                    errCount++;
                 
                 } else {
 
@@ -187,6 +195,7 @@ void firstPass(AST *node) {
                                 parameters->son[0]->son[0]->symbol->dataType = LIT_INTEGER;
                                 if(parameters->son[0]->son[0]->symbol->defined==TRUE) {
                                     fprintf(stderr,"SEMANTIC ERROR: Var inside func %s is already defined\n", function->symbol->key);
+                                    errCount++;
                                 }
                                 parameters->son[0]->son[0]->symbol->defined = TRUE;
                                 parameters->son[0]->son[0]->symbol->nature = NATURE_SCALAR;
@@ -197,6 +206,7 @@ void firstPass(AST *node) {
                                 parameters->son[0]->son[0]->symbol->dataType = LIT_REAL;
                                 if(parameters->son[0]->son[0]->symbol->defined==TRUE) {
                                     fprintf(stderr,"SEMANTIC ERROR: Var inside func %s is already defined\n", function->symbol->key);
+                                    errCount++;
                                 }
                                 parameters->son[0]->son[0]->symbol->defined = TRUE;
                                 parameters->son[0]->son[0]->symbol->nature = NATURE_SCALAR;
