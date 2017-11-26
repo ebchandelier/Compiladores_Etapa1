@@ -24,9 +24,17 @@ int main(int argc, char** argv) {
 	
 	initMe();
 	
+	if(!argv[1]) {
+		exit(1);
+	}
+
 	yyin = fopen(argv[1], "r");
 	//yyin = fopen("a.txt", "r");
 	
+	if(!yyin) {
+		exit(2);
+	}
+
 	yyparse();
 	
 	fclose(yyin);
@@ -38,7 +46,14 @@ int main(int argc, char** argv) {
 
 	//ETAPA 4: test semantic
 	firstPass(astRoot);
+	
+	
 	secondPass(astRoot);
 
-	return 0;
+	if(getErrCount()>0) {
+		fprintf(stderr, "Terminou com erros semantivos\n");
+		exit(4);
+	}
+
+	exit(0);
 }

@@ -14,3 +14,4 @@
 
 void firstPass(AST *node);
 int secondPass(AST *node);
+int getErrCount();

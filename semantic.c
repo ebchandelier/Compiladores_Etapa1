@@ -8,6 +8,11 @@ int errCount = 0;
 //int currentReturnExpected;
 HashEntry* currentFuntion;
 
+int getErrCount() {
+
+    return errCount;
+}
+
 void firstPass(AST *node) {
     //verify declarations os variables, lists and functions,
     //set if var/func was defined,
