@@ -48,6 +48,7 @@
 %token<symbol> LIT_REAL
 %token<symbol> LIT_CHAR
 %token<symbol> LIT_STRING
+%token<symbol> NO_TYPE
 
 %token TOKEN_ERROR
 
@@ -103,11 +104,11 @@ vardec:
 	;
 
 expr:
-    LIT_INTEGER { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0);}
-    | LIT_CHAR { $$ = astCreate(LITERAL, $1, 0, 0, 0, 0); }
+    value	{$$=$1;}
     | funcall	{ $$ = $1; }	
+    | TK_IDENTIFIER				{ $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); }
     | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL_ARRAY, $1, $2, 0, 0, 0);}
-    | '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
+	| '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
     | expr '+' expr	{ $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0);}
     | expr '-' expr { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0);}
     | expr '*' expr { $$ = astCreate(AST_MUL, 0, $1, $3, 0, 0);}
@@ -125,7 +126,6 @@ expr:
 
 at_array:
 	'[' expr ']'	{ $$ = astCreate(AST_AT_ARRAY, 0, $2, 0, 0, 0); }
-	|	{ $$ = 0; }
 	;
 
 funcall:

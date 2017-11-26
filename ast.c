@@ -2,7 +2,7 @@
 
 AST* astCreate(int type, HashEntry* symbol, AST* son1, AST* son2, AST* son3, AST* son4) {
 
-    fprintf(stderr, "CREATING AST NODE\n");
+    //fprintf(stderr, "CREATING AST NODE\n");
     AST* newNode = (AST*)calloc(1, sizeof(AST));
     newNode->type = type;
     newNode->symbol = symbol;
