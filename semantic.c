@@ -288,6 +288,11 @@ int secondPass(AST *node) {
                 break;
             }
             case AST_SYMBOL: {
+                if(node->symbol->nature != NATURE_SCALAR) {
+                    fprintf(stderr, "SEMANTIC ERROR, Var %s was Used like a SCALAR\n", node->symbol->key);
+                    errCount++;
+                }
+
                 if(node->symbol->defined != TRUE) {
                     fprintf(stderr, "SEMANTIC ERROR, Var %s was not defined\n", node->symbol->key);
                     errCount++;
@@ -314,7 +319,10 @@ int secondPass(AST *node) {
                 int f1 = secondPass(node->son[0]);
                 int f2 = secondPass(node->son[1]);
                 if(f1==NO_TYPE || f2 == NO_TYPE) return NO_TYPE;
-                if(f1==LIT_CHAR || f1==LIT_STRING || f2==LIT_CHAR || f2==LIT_STRING) {
+                if(f1==LIT_CHAR) f1 = LIT_INTEGER;
+                if(f2==LIT_CHAR) f2 = LIT_INTEGER;
+
+                if(f1==LIT_STRING || f2==LIT_STRING) {
                     fprintf(stderr, "SEMANTIC ERROR, expression with wrong parameters\n");
                     errCount++;
                     return NO_TYPE;
@@ -362,6 +370,11 @@ int secondPass(AST *node) {
             }   
 
             case AST_SYMBOL_ASSIGNMENT: {
+
+                if(node->symbol->nature != NATURE_SCALAR) {
+                    fprintf(stderr, "SEMANTIC ERROR, Var %s was Used like a SCALAR\n", node->symbol->key);
+                    errCount++;
+                }
                 
                 if(node->symbol->defined!=TRUE) {
                 
@@ -378,6 +391,11 @@ int secondPass(AST *node) {
             } 
 
             case ASSIGNMENT_LIST_INDEX: {
+
+                if(node->symbol->nature != NATURE_VECTOR) {
+                    fprintf(stderr, "SEMANTIC ERROR, Var %s was Used like a VECTOR\n", node->symbol->key);
+                    errCount++;
+                }
                 
                 if(node->symbol->defined!=TRUE) {
                     fprintf(stderr, "SEMANTIC ERROR, Array was not declared :%s var\n", node->symbol->key);
@@ -404,6 +422,10 @@ int secondPass(AST *node) {
             }   
             
             case AST_SYMBOL_ARRAY: {
+                if(node->symbol->nature != NATURE_VECTOR) {
+                    fprintf(stderr, "SEMANTIC ERROR, Var %s was used like a VECTOR\n", node->symbol->key);
+                    errCount++;
+                }
                 if(node->symbol->defined!=TRUE) {
                     fprintf(stderr, "SEMANTIC ERROR, Array was not declared :%s var\n", node->symbol->key);
                      errCount++;
@@ -441,6 +463,11 @@ int secondPass(AST *node) {
             }   
 
             case AST_FUN_CAL: {
+
+                if(node->symbol->nature != NATURE_FUNCTION) {
+                    fprintf(stderr, "SEMANTIC ERROR, Var %s was Used like a FUNCTION\n", node->symbol->key);
+                    errCount++;
+                }
 
                 if(node->symbol->defined!=TRUE) {
                     fprintf(stderr, "SEMANTIC ERROR, Function was not declared :%s var\n", node->symbol->key);
