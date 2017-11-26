@@ -194,7 +194,6 @@ void firstPass(AST *node) {
                             case AST_BYTE:
                             case AST_SHORT:
                             case AST_LONG: {
-                                //parameters->son[0]->son[1]-> TO ANALIZANDO AQUI
                                 parameters->son[0]->son[0]->symbol->dataType = LIT_INTEGER;
                                 if(parameters->son[0]->son[0]->symbol->defined==TRUE) {
                                     fprintf(stderr,"SEMANTIC ERROR: Var inside func %s is already defined\n", function->symbol->key);
@@ -293,10 +292,7 @@ int secondPass(AST *node) {
                 break;
             }
 
-            case AST_ADD: {
-                fprintf(stderr, "no type:%d ...%d and %d: INTEGER: %d, REAL: %d\n", NO_TYPE, secondPass(node->son[0]), secondPass(node->son[1]), LIT_INTEGER, LIT_REAL);
-                break;
-            }
+            case AST_ADD:
             case AST_SUB:
             case AST_MUL:
             case AST_DIV:
@@ -312,6 +308,7 @@ int secondPass(AST *node) {
 
                 int f1 = secondPass(node->son[0]);
                 int f2 = secondPass(node->son[1]);
+                if(f1==NO_TYPE || f2 == NO_TYPE) return NO_TYPE;
                 if(f1==LIT_CHAR || f1==LIT_STRING || f2==LIT_CHAR || f2==LIT_STRING) {
                     fprintf(stderr, "SEMANTIC ERROR, expression with wrong parameters\n");
                     errCount++;

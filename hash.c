@@ -69,7 +69,7 @@ HashEntry *setHashValue(HashTable *hashtable, char *key, int value) {
 		printf("kkk\n");
 	}
 
-	bin = ht_hash( hashtable, key );
+	//bin = ht_hash( hashtable, key );
 
 	next = hashtable->table[ bin ];
 
