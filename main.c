@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
 
 	//ETAPA 4: test semantic
 	firstPass(astRoot);
+	secondPass(astRoot);
 
 	return 0;
 }

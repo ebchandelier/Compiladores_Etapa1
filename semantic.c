@@ -5,6 +5,8 @@
 #include"y.tab.h"
 
 int errCount = 0;
+//int currentReturnExpected;
+HashEntry* currentFuntion;
 
 void firstPass(AST *node) {
     //verify declarations os variables, lists and functions,
@@ -192,6 +194,7 @@ void firstPass(AST *node) {
                             case AST_BYTE:
                             case AST_SHORT:
                             case AST_LONG: {
+                                //parameters->son[0]->son[1]-> TO ANALIZANDO AQUI
                                 parameters->son[0]->son[0]->symbol->dataType = LIT_INTEGER;
                                 if(parameters->son[0]->son[0]->symbol->defined==TRUE) {
                                     fprintf(stderr,"SEMANTIC ERROR: Var inside func %s is already defined\n", function->symbol->key);
@@ -218,6 +221,8 @@ void firstPass(AST *node) {
                     }
                 }
 
+                //TODO: verify return type, is that necessary?
+
                 break;
             }
             default: {
@@ -229,6 +234,167 @@ void firstPass(AST *node) {
 
                   break;
             }
+        }
+    }
+}
+
+int secondPass(AST *node) {
+//pass to verify type and usage
+    if(node == 0) {
+        
+		return NO_TYPE;
+	
+    } else {
+
+		switch(node->type) {
+
+            case AST_LIST:{
+                
+                secondPass(node->son[0]);
+                secondPass(node->son[1]);
+                break;
+            }
+            case AST_BYTE:      
+            case AST_SHORT:     
+            case AST_LONG: {
+                return LIT_INTEGER;
+                break;
+            }
+            case AST_FLOAT: 
+            case AST_DOUBLE: {
+                return LIT_REAL;
+                break;
+            }
+            case LITERAL: {
+
+                switch(node->symbol->value) {
+                    case AST_BYTE:
+                    case AST_SHORT:
+                    case AST_LONG: {
+                        return LIT_INTEGER;
+                        break;  
+                    } 
+                    case AST_FLOAT:
+                    case AST_DOUBLE: {
+                        return LIT_REAL;
+                        break;
+                    }
+
+                }
+                break;
+            }
+            case AST_SYMBOL: {
+                if(node->symbol->defined != TRUE) {
+                    fprintf(stderr, "SEMANTIC ERROR, Var %s was not defined\n", node->symbol->key);
+                    errCount++;
+                    return NO_TYPE;
+                }
+                return node->symbol->dataType;
+                break;
+            }
+
+            case AST_ADD: {
+                fprintf(stderr, "no type:%d ...%d and %d: INTEGER: %d, REAL: %d\n", NO_TYPE, secondPass(node->son[0]), secondPass(node->son[1]), LIT_INTEGER, LIT_REAL);
+                break;
+            }
+            case AST_SUB:
+            case AST_MUL:
+            case AST_DIV:
+            case AST_CHANGE_SIGN:
+            case AST_LESS:      
+            case AST_GREA:      
+            case GE:       
+            case LE:       
+            case EQUAL:    
+            case NOT_EQUAL:
+            case OR:       
+            case AND: {
+
+                int f1 = secondPass(node->son[0]);
+                int f2 = secondPass(node->son[1]);
+                if(f1==LIT_CHAR || f1==LIT_STRING || f2==LIT_CHAR || f2==LIT_STRING) {
+                    fprintf(stderr, "SEMANTIC ERROR, expression with wrong parameters\n");
+                    errCount++;
+                    return NO_TYPE;
+                }
+                if(f1==LIT_REAL || f2==LIT_REAL) {
+                    return LIT_REAL;
+                }return LIT_INTEGER;
+            }      
+
+            case FUNCTION: {
+                //int currentReturnExpected = node->son[0]->son[1]->symbol->returnType; 
+                currentFuntion = node->son[0]->son[1]->symbol;
+                secondPass(node->son[1]);
+                break;
+            }      
+            case FUNCTION_BODY: {
+                return secondPass(node->son[0]);
+                break;
+            }     
+
+            case AST_CMD_BLOCK: {
+                return secondPass(node->son[0]);
+                break;
+            } 
+
+            case AST_CMD_LIST: {
+                int t0 = secondPass(node->son[0]);
+                int t1 = secondPass(node->son[1]);
+
+                break;
+            }
+            
+            case RETURN_CMD: {
+                int t0 = secondPass(node->son[0]);
+                if(t0 != currentFuntion->returnType) {
+                    fprintf(stderr, "SEMANTIC ERROR, not expected return of function %s\n", currentFuntion->key);
+                }
+                break;
+            }    
+
+            case PARENTESES: {
+                return secondPass(node->son[0]);
+                break;
+            }   
+            case AST_SYMBOL_ARRAY: {
+                
+
+                break;
+            }  
+
+            case AST_SYMBOL_ASSIGNMENT: {
+                
+                if(node->symbol->defined!=TRUE) {
+                
+                    fprintf(stderr, "SEMANTIC ERROR, variable not defined: %s\n", node->symbol->key);
+                
+                } else if(node->symbol->dataType != secondPass(node->son[0])) {
+                    
+                    fprintf(stderr, "SEMANTIC ERROR, wrong types on assignment of %s var\n", node->symbol->key);
+                }
+                break;
+            } 
+
+
+            case AST_AT_ARRAY: fprintf(stderr, "AST_AT_ARRAY\n"); break;
+
+            
+            case TOKEN:         fprintf(stderr, "TOKEN\n"); break;
+            case VALUE_LIST:         fprintf(stderr, "VALUE_LIST\n"); break;
+            case FUNCTION_HEADER:   fprintf(stderr, "FUNCTION_HEADER\n"); break;
+            case ARG_LIST:      fprintf(stderr, "ARG_LIST\n"); break;
+            case ARGUMENT:      fprintf(stderr, "ARGUMENT\n"); break;
+            case ASSIGNMENT_LIST_INDEX: fprintf(stderr, "ASSIGNMENT_LIST_INDEX\n"); break;
+            case READ_CMD:      fprintf(stderr, "READ_CMD\n"); break;
+            case PRINT_CMD:     fprintf(stderr, "PRINT_CMD\n"); break;
+            case IF_THEN_ELSE_CMD: fprintf(stderr, "IF_THEN_ELSE_CMD\n"); break;
+            case WHILE_CMD:     fprintf(stderr, "WHILE_CMD\n"); break;
+            case PRINT_CONTENT: fprintf(stderr, "PRINT_CONTENT\n"); break;
+            case AST_FUN_CAL:   fprintf(stderr, "AST_FUN_CAL\n"); break;
+            case AST_PARAM_LIST:    fprintf(stderr, "AST_PARAM_LIST\n"); break;
+            case ELSE_CMD:      fprintf(stderr, "ELSE_CMD\n");
+
         }
     }
 }

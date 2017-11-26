@@ -13,3 +13,4 @@
 #define DATA_TYPE_FUNCTION 7
 
 void firstPass(AST *node);
+int secondPass(AST *node);
