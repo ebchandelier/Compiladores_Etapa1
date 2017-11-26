@@ -106,8 +106,8 @@ vardec:
 expr:
     value	{$$=$1;}
     | funcall	{ $$ = $1; }	
-    | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL_ARRAY, $1, $2, 0, 0, 0);}
     | TK_IDENTIFIER				{ $$ = astCreate(AST_SYMBOL, $1, 0, 0, 0, 0); }
+    | TK_IDENTIFIER at_array	{ $$ = astCreate(AST_SYMBOL_ARRAY, $1, $2, 0, 0, 0);}
 	| '-' expr { $$ = astCreate(AST_CHANGE_SIGN, 0, $2, 0, 0, 0); }//%prec UMINUS { $$ = opr(UMINUS, 1, $2); }
     | expr '+' expr	{ $$ = astCreate(AST_ADD, 0, $1, $3, 0, 0);}
     | expr '-' expr { $$ = astCreate(AST_SUB, 0, $1, $3, 0, 0);}

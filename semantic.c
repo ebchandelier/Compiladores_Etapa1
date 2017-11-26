@@ -63,7 +63,7 @@ void firstPass(AST *node) {
 
                     if( hashNode->dataType != litType ) {
 
-                        fprintf(stderr, "%d and %d\n",hashNode->dataType, litType);
+                        //fprintf(stderr, "%d and %d\n",hashNode->dataType, litType);
                         fprintf(stderr, "ERRO Semantico, var: %s, tipos incompatíveis na declaração.\n", hashNode->key);
                         errCount++;
                     
@@ -346,6 +346,7 @@ int secondPass(AST *node) {
                 int t0 = secondPass(node->son[0]);
                 if(t0 != currentFuntion->returnType) {
                     fprintf(stderr, "SEMANTIC ERROR, not expected return of function %s\n", currentFuntion->key);
+                     errCount++;
                 }
                 break;
             }    
@@ -354,44 +355,135 @@ int secondPass(AST *node) {
                 return secondPass(node->son[0]);
                 break;
             }   
-            case AST_SYMBOL_ARRAY: {
-                
-
-                break;
-            }  
 
             case AST_SYMBOL_ASSIGNMENT: {
                 
                 if(node->symbol->defined!=TRUE) {
                 
                     fprintf(stderr, "SEMANTIC ERROR, variable not defined: %s\n", node->symbol->key);
+                    errCount++;
+
                 
                 } else if(node->symbol->dataType != secondPass(node->son[0])) {
                     
                     fprintf(stderr, "SEMANTIC ERROR, wrong types on assignment of %s var\n", node->symbol->key);
+                    errCount++;
                 }
                 break;
             } 
 
+            case ASSIGNMENT_LIST_INDEX: {
+                
+                if(node->symbol->defined!=TRUE) {
+                    fprintf(stderr, "SEMANTIC ERROR, Array was not declared :%s var\n", node->symbol->key);
+                     errCount++;
+                }
+                
+                int t0 = secondPass(node->son[0]);
+                int t1 = secondPass(node->son[1]);
 
-            case AST_AT_ARRAY: fprintf(stderr, "AST_AT_ARRAY\n"); break;
-
+                if(t0 != LIT_INTEGER) {
+                    fprintf(stderr, "SEMANTIC ERROR, Array index should be of type INTEGER at %s var\n", node->symbol->key);
+                     errCount++;
+                }
+                if(t1 != node->symbol->dataType) {
+                    fprintf(stderr, "SEMANTIC ERROR, Array assignment of diff types at %s var\n", node->symbol->key);
+                     errCount++;
+                }
+                break;
+            } 
             
-            case TOKEN:         fprintf(stderr, "TOKEN\n"); break;
-            case VALUE_LIST:         fprintf(stderr, "VALUE_LIST\n"); break;
-            case FUNCTION_HEADER:   fprintf(stderr, "FUNCTION_HEADER\n"); break;
-            case ARG_LIST:      fprintf(stderr, "ARG_LIST\n"); break;
-            case ARGUMENT:      fprintf(stderr, "ARGUMENT\n"); break;
-            case ASSIGNMENT_LIST_INDEX: fprintf(stderr, "ASSIGNMENT_LIST_INDEX\n"); break;
-            case READ_CMD:      fprintf(stderr, "READ_CMD\n"); break;
-            case PRINT_CMD:     fprintf(stderr, "PRINT_CMD\n"); break;
-            case IF_THEN_ELSE_CMD: fprintf(stderr, "IF_THEN_ELSE_CMD\n"); break;
-            case WHILE_CMD:     fprintf(stderr, "WHILE_CMD\n"); break;
-            case PRINT_CONTENT: fprintf(stderr, "PRINT_CONTENT\n"); break;
-            case AST_FUN_CAL:   fprintf(stderr, "AST_FUN_CAL\n"); break;
-            case AST_PARAM_LIST:    fprintf(stderr, "AST_PARAM_LIST\n"); break;
-            case ELSE_CMD:      fprintf(stderr, "ELSE_CMD\n");
+            case PRINT_CMD: {
+                secondPass(node->son[0]);
+                break;
+            }   
+            
+            case AST_SYMBOL_ARRAY: {
+                if(node->symbol->defined!=TRUE) {
+                    fprintf(stderr, "SEMANTIC ERROR, Array was not declared :%s var\n", node->symbol->key);
+                     errCount++;
+                }
+                int t0 = secondPass(node->son[0]);
+                if(t0 != LIT_INTEGER) {
+                    fprintf(stderr, "SEMANTIC ERROR, Array index should be of type INTEGER at %s var\n", node->symbol->key);
+                     errCount++;
+                }
 
+                return node->symbol->dataType;
+                break;
+            }  
+            case PRINT_CONTENT: {
+
+                int t0 = secondPass(node->son[0]);
+                if(t0 != LIT_STRING) {
+
+                    //fprintf(stderr, "SEMANTIC ERROR, Print list Items should be of type LIT_STRING\n");
+                    //A LIT_STRING SÒ pode ser usada na print cmd, mas nao quer dizer que outras coisas n podem.
+                }
+                secondPass(node->son[1]);
+                break;
+            }
+            case READ_CMD: {
+
+                secondPass(node->son[0]);
+                break;
+            }     
+
+            case WHILE_CMD: {
+                secondPass(node->son[0]);
+                secondPass(node->son[1]);
+                break;
+            }   
+
+            case AST_FUN_CAL: {
+
+                if(node->symbol->defined!=TRUE) {
+                    fprintf(stderr, "SEMANTIC ERROR, Function was not declared :%s var\n", node->symbol->key);
+                     errCount++;
+                }
+
+                AST *usageNode = node->son[0];
+
+                AST *declarationNode = node->symbol->declarationNode;
+                
+                AST* parameters = declarationNode->son[0]->son[2];
+
+                while(parameters != 0 && usageNode != 0) {
+
+                    if( parameters->son[0]->son[0]->symbol->dataType != secondPass(usageNode->son[0])) {
+                        fprintf(stderr, "SEMANTIC ERROR, Parameters of diff types at func %s\n", node->symbol->key);
+                        errCount++;
+                    }
+
+                    usageNode = usageNode->son[1]?usageNode->son[1] :0;
+                    parameters = parameters->son[1]?parameters->son[1] : 0;
+                }
+                
+                if(parameters != 0 || usageNode != 0) {
+                    fprintf(stderr, "SEMANTIC ERROR, Wrong number of parameters at func %s\n", node->symbol->key);
+                     errCount++;
+                }
+
+                return node->symbol->returnType;
+                break;
+            }  
+
+            case IF_THEN_ELSE_CMD:{
+                secondPass(node->son[0]);
+                secondPass(node->son[1]);
+                secondPass(node->son[2]);
+                break;
+            } 
+
+            case ELSE_CMD: {
+                secondPass(node->son[0]);
+                break;
+            }  
+
+            case AST_AT_ARRAY: {
+                return secondPass(node->son[0]);
+                break;
+            } 
         }
     }
 }
