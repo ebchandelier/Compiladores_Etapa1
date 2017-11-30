@@ -252,13 +252,22 @@ TAC *createWhileTAC(TAC *test, TAC *doWhile){
 
 }
 
-TAC *createFunctionTAC(TAC **newTAC){
+TAC *createFunctionTAC(HashEntry *node, TAC *header, TAC *body){
 	return NULL;
-	HashEntry *startLabel = createLabel();
-	HashEntry *endLabel = createLabel();
+	HashEntry *startLabel = createStartLabel(node);
+	HashEntry *endLabel = createEndLabel(node);
 
-	createTAC(TAC_BEGINFUN, startLabel, NULL, NULL);
-	createTAC(TAC_LABEL, startLabel, NULL, NULL);
+	return 
+	joinTAC(
+		joinTAC(
+			joinTAC(
+				joinTAC(
+					joinTAC(
+					createTAC(TAC_BEGINFUN, node, NULL, NULL), createTAC(TAC_LABEL, startLabel, NULL, NULL))
+				, header)
+			, body)//block goes here
+		, createTAC(TAC_ENDFUN, node, NULL, NULL))
+	, createTAC(TAC_LABEL, endLabel, NULL, NULL));
 }
 
 TAC *createArgTAC(TAC **newTAC){
@@ -416,8 +425,8 @@ TAC *generateCode(AST *node){
 			result = createWhileTAC(newTAC[0], newTAC[1]);
 			break;
 
-		case FUNCTION_HEADER:
-			result = createFunctionTAC(newTAC);
+		case FUNCTION:
+			result = createFunctionTAC(node->symbol, newTAC[0], newTAC[1]);
 			break;
 
 		case ARGUMENT:
@@ -436,7 +445,7 @@ TAC *generateCode(AST *node){
 		case PARENTESES:
 		case AST_CMD_LIST:
 		case AST_CMD_BLOCK:
-		case FUNCTION:
+		case FUNCTION_HEADER:
 		case AST_LIST:
 		case AST_BYTE:
 		case AST_SHORT:
