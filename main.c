@@ -1,4 +1,4 @@
-#include "semantic.h"
+#include "tac.h"
 
 extern FILE *yyin;
 
@@ -47,13 +47,19 @@ int main(int argc, char** argv) {
 	//ETAPA 4: test semantic
 	firstPass(astRoot);
 	
-	
 	secondPass(astRoot);
+
+	//ETAPA 5
+	TAC *first = generateCode(astRoot);
+	printTAC(reverseCode(first));
+
+
 
 	if(getErrCount()>0) {
 		fprintf(stderr, "Terminou com erros semantivos\n");
 		exit(4);
 	}
+	
 
 	exit(0);
 }

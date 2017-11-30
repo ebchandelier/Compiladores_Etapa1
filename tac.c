@@ -80,7 +80,42 @@ TAC *copyTAC(TAC *tac){
 }
 
 void printTAC(TAC *tac){
-	//TO-DO
+	TAC *aux;
+
+	const char* tacNames[] = {
+	"TAC_PARAM",
+	"TAC_SYMBOL",
+	"TAC_MOVE",
+	"TAC_ARRAYMOVE",
+	"TAC_ARRAY_ACCESS",
+	"TAC_ADD",
+	"TAC_SUB",
+	"TAC_MUL",
+	"TAC_DIV",
+	"TAC_INV",
+	"TAC_AND",
+	"TAC_OR",
+	"TAC_GT",
+	"TAC_LT",
+	"TAC_EQ",
+	"TAC_GE",
+	"TAC_LE",
+	"TAC_NE",
+	"TAC_LABEL",
+	"TAC_BEGINFUN",
+	"TAC_ENDFUN",
+	"TAC_IFZ",
+	"TAC_JUMP",
+	"TAC_CALL",
+	"TAC_ARG",
+	"TAC_RET",
+	"TAC_PRINT",
+	"TAC_READ"
+	};
+
+	for (aux = tac; aux != NULL; aux = aux->next){
+		fprintf(stderr, "%s\n", tacNames[aux->type]);
+	}
 }
 
 void initTAC(HashTable *ht){
@@ -133,11 +168,6 @@ TAC *createPrintTAC(TAC *newTAC){
 
 TAC *createRetTAC(TAC *newTAC){
 	return joinTAC(newTAC, createTAC(TAC_RET, NULL, newTAC->res, NULL));
-}
-
-TAC *createParamTAC(TAC **newTAC){
-	//TO-DO
-	return NULL;
 }
 
 TAC *createIfTAC(TAC *test, TAC *thenTAC, TAC *elseTAC){
@@ -205,6 +235,13 @@ TAC *createFunctionTAC(TAC **newTAC){
 TAC *createArgTAC(TAC **newTAC){
 	//TO-DO
 	return NULL;
+}
+
+TAC *createParamTAC(TAC *first, TAC *rest){
+	if (!first)
+		return NULL;
+
+	return joinTAC(joinTAC(createTAC(TAC_PARAM, first->res, NULL, NULL), first), rest);
 }
 
 TAC *createArrayDecTAC(TAC *id, AST *values){
@@ -333,7 +370,7 @@ TAC *generateCode(AST *node){
 			break;
 
 		case AST_PARAM_LIST:
-			result = createParamTAC(newTAC);
+			result = createParamTAC(newTAC[0], newTAC[1]);
 			break;
 
 		case IF_THEN_ELSE_CMD:
