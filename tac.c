@@ -265,7 +265,11 @@ TAC *createWhileTAC(TAC *test, TAC *doWhile){
 }
 
 TAC *createFunctionTAC(HashEntry *node, TAC *header, TAC *body){
-	return NULL;
+	if (!node){
+		fprintf(stderr, "No fun node!\n");
+		return NULL;
+	}
+
 	HashEntry *startLabel = createStartLabel(node);
 	HashEntry *endLabel = createEndLabel(node);
 
@@ -406,7 +410,6 @@ TAC *generateCode(AST *node){
 		case AST_SYMBOL_ARRAY:
 			//ACCESS ARRAY
 			result = createTAC(TAC_ARRAY_ACCESS, NULL, node->symbol, newTAC[0]->res);
-			fprintf(stderr, "worked\n");
 			break;
 
 		case READ_CMD:
@@ -438,7 +441,7 @@ TAC *generateCode(AST *node){
 			break;
 
 		case FUNCTION:
-			result = createFunctionTAC(node->symbol, newTAC[0], newTAC[1]);
+			result = createFunctionTAC(node->son[0]->son[1]->symbol, newTAC[0], newTAC[1]);
 			break;
 
 		case ARGUMENT:
@@ -448,6 +451,7 @@ TAC *generateCode(AST *node){
 		case TOKEN:
 		//?????????
 //-----------------------------
+		case AST_LIST:
 		case VALUE_LIST:
 		case ELSE_CMD:
 		case ARG_LIST:
@@ -458,7 +462,6 @@ TAC *generateCode(AST *node){
 		case AST_CMD_LIST:
 		case AST_CMD_BLOCK:
 		case FUNCTION_HEADER:
-		case AST_LIST:
 		case AST_BYTE:
 		case AST_SHORT:
 		case AST_DOUBLE:
