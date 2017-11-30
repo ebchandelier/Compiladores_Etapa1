@@ -132,7 +132,7 @@ HashEntry *createTemp(){
 	sprintf(name, "__temp_%d", tempCounter);
 	tempCounter++;
 	//FIX
-	HashEntry *newEntry = setHashValue(hash, name, AST_BYTE);
+	HashEntry *newEntry = setHashValue(hash, name, AST_SYMBOL);
 
 	return newEntry;
 }
@@ -146,8 +146,32 @@ HashEntry *createLabel(){
 	sprintf(name, "__label_%d", labelCounter);
 	labelCounter++;
 	//FIX
-	HashEntry *newEntry = setHashValue(hash, name, AST_BYTE);
+	HashEntry *newEntry = setHashValue(hash, name, AST_SYMBOL);
 	
+	return newEntry;
+}
+
+HashEntry *createStartLabel(HashEntry *fun){
+	int len = strlen(fun->key)+100;
+	char *label = malloc(len);
+	bzero(label, len);
+
+	sprintf(label, "___%s__begin__", fun->key);
+
+	HashEntry *newEntry = setHashValue(hash, label, AST_SYMBOL);
+
+	return newEntry;
+}
+
+HashEntry *createEndLabel(HashEntry *fun){
+	int len = strlen(fun->key)+100;
+	char *label = malloc(len);
+	bzero(label, len);
+
+	sprintf(label, "___%s__end__", fun->key);
+
+	HashEntry *newEntry = setHashValue(hash, label, AST_SYMBOL);
+
 	return newEntry;
 }
 
@@ -392,9 +416,9 @@ TAC *generateCode(AST *node){
 			result = createWhileTAC(newTAC[0], newTAC[1]);
 			break;
 
-		//case FUNCTION_HEADER:
-		//	result = createFunctionTAC(newTAC);
-		//	break;
+		case FUNCTION_HEADER:
+			result = createFunctionTAC(newTAC);
+			break;
 
 		case ARGUMENT:
 			result = createArgTAC(newTAC);
