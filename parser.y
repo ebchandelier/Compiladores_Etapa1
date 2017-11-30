@@ -14,6 +14,8 @@
 
 	AST* astRoot;
 
+	HashTable *hashtable;
+
 	void initMe();
 %}
 

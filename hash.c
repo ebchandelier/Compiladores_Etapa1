@@ -26,7 +26,7 @@ HashTable *createHashTable(int size) {
 /*Hash a string for a particular hash table.*/
 int ht_hash( HashTable *hashtable, char *key ) {
 
-	unsigned long int hashval;
+	unsigned long int hashval = 0;
 	int i = 0;
 
 	/* Convert our string to an integer */

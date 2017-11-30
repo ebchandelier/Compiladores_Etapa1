@@ -129,7 +129,7 @@ HashEntry *createTemp(){
 	char name[MAX_NAME];
 	bzero(name, MAX_NAME);
 
-	sprintf(name, "__temp%d", tempCounter);
+	sprintf(name, "__temp_%d", tempCounter);
 	tempCounter++;
 	//FIX
 	HashEntry *newEntry = setHashValue(hash, name, AST_BYTE);
@@ -143,22 +143,25 @@ HashEntry *createLabel(){
 	char name[MAX_NAME];
 	bzero(name, MAX_NAME);
 
-	sprintf(name, "__label%d", labelCounter);
+	sprintf(name, "__label_%d", labelCounter);
 	labelCounter++;
 	//FIX
 	HashEntry *newEntry = setHashValue(hash, name, AST_BYTE);
-
+	
 	return newEntry;
 }
 
 TAC *createArithmeticTAC(TACType type, TAC **newTAC){
-	HashEntry *temp1 = newTAC[1]->res;
-	HashEntry *temp2 = newTAC[0]->res;
+	HashEntry *temp1 = newTAC[0]->res;
+	HashEntry *temp2 = newTAC[1]->res;
 
-	return joinTAC(joinTAC(newTAC[1], newTAC[0]), createTAC(type, createTemp(), temp1, temp2));
+	fprintf(stderr, "about to create temp\n");
+
+	return joinTAC(joinTAC(newTAC[0], newTAC[1]), createTAC(type, createLabel(), temp1, temp2));
 }
 
 TAC *createCallTAC(TAC *id, TAC *arg){
+
 	return joinTAC(joinTAC(arg, id), createTAC(TAC_CALL, createLabel(), id->res, NULL));
 }
 
@@ -167,7 +170,7 @@ TAC *createPrintTAC(TAC *newTAC){
 }
 
 TAC *createRetTAC(TAC *newTAC){
-	return joinTAC(newTAC, createTAC(TAC_RET, NULL, newTAC->res, NULL));
+	return joinTAC(createTAC(TAC_RET, NULL, newTAC->res, NULL), newTAC);
 }
 
 TAC *createIfTAC(TAC *test, TAC *thenTAC, TAC *elseTAC){
@@ -228,13 +231,22 @@ TAC *createWhileTAC(TAC *test, TAC *doWhile){
 }
 
 TAC *createFunctionTAC(TAC **newTAC){
-	//TO-DO
 	return NULL;
+	HashEntry *startLabel = createLabel();
+	HashEntry *endLabel = createLabel();
+
+	createTAC(TAC_BEGINFUN, startLabel, NULL, NULL);
+	createTAC(TAC_LABEL, startLabel, NULL, NULL);
 }
 
 TAC *createArgTAC(TAC **newTAC){
-	//TO-DO
-	return NULL;
+	TAC *first = newTAC[0];
+	TAC *rest = newTAC[1];
+
+	if (!first)
+		return NULL;
+
+	return joinTAC(joinTAC(createTAC(TAC_ARG, first->res, NULL, NULL), first), rest);
 }
 
 TAC *createParamTAC(TAC *first, TAC *rest){
@@ -381,9 +393,9 @@ TAC *generateCode(AST *node){
 			result = createWhileTAC(newTAC[0], newTAC[1]);
 			break;
 
-		case FUNCTION_HEADER:
-			result = createFunctionTAC(newTAC);
-			break;
+		//case FUNCTION_HEADER:
+		//	result = createFunctionTAC(newTAC);
+		//	break;
 
 		case ARGUMENT:
 			result = createArgTAC(newTAC);

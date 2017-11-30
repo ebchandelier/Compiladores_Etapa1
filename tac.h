@@ -3,7 +3,7 @@
 
 #include "semantic.h"
 
-#define MAX_NAME 17
+#define MAX_NAME 20
 
 enum TAC_TYPE_ENUM{
 	TAC_PARAM,
@@ -54,5 +54,5 @@ HashEntry *createTemp();
 HashEntry *createLabel();
 TAC *generateCode(AST *node);
 TAC *reverseCode(TAC *tac);
-
+void initTAC(HashTable *hash);
 #endif

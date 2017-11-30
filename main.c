@@ -49,7 +49,10 @@ int main(int argc, char** argv) {
 	
 	secondPass(astRoot);
 
+	fprintf(stderr, "Finished both passes\n");
+
 	//ETAPA 5
+	initTAC(hashtable);
 	TAC *first = generateCode(astRoot);
 	printTAC(reverseCode(first));
 

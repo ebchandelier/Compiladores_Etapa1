@@ -8,13 +8,19 @@ aff : long = 2;
 
 (long) incn (x: long, n: long)
   {
-    a1 = 2.0;
+      a1 = 2.0;
 
-    a 3 = v[1];
+    if (1) then 
+    a1 = a1;
 
-    aff = aff;
+    //a1 = a1 + 50;
 
-    aff = incn(incn(1,1),1);
+    //a 3 = v[1];
 
-    return (x+n);
+    //aff = aff;
+
+    //aff = incn(incn(1,1),1);
+
+    //return (x+n);
+
     }

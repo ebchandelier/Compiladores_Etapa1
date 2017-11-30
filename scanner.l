@@ -25,7 +25,7 @@ int ({digit})+
 	void initMe(void);
     void yyparse();
 
-	HashTable *hashtable;
+	extern HashTable *hashtable;
 %}
 
 %%
