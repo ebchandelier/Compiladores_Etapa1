@@ -155,8 +155,6 @@ TAC *createArithmeticTAC(TACType type, TAC **newTAC){
 	HashEntry *temp1 = newTAC[0]->res;
 	HashEntry *temp2 = newTAC[1]->res;
 
-	fprintf(stderr, "about to create temp\n");
-
 	return joinTAC(joinTAC(newTAC[0], newTAC[1]), createTAC(type, createLabel(), temp1, temp2));
 }
 
@@ -362,7 +360,8 @@ TAC *generateCode(AST *node){
 
 		case AST_SYMBOL_ARRAY:
 			//ACCESS ARRAY
-			result = createTAC(TAC_ARRAY_ACCESS, NULL, newTAC[0]->res, newTAC[1]->res);
+			result = createTAC(TAC_ARRAY_ACCESS, NULL, node->symbol, newTAC[0]->res);
+			fprintf(stderr, "worked\n");
 			break;
 
 		case READ_CMD:

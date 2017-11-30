@@ -13,14 +13,14 @@ aff : long = 2;
     if (1) then 
     a1 = a1;
 
-    //a1 = a1 + 50;
+    a1 = a1 + 50;
 
-    //a 3 = v[1];
+    a 3 = v[2];
 
-    //aff = aff;
+    aff = aff;
 
-    //aff = incn(incn(1,1),1);
+    aff = incn(incn(1,1),1);
 
-    //return (x+n);
+    return (x+n);
 
     }
