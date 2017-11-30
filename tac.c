@@ -124,7 +124,7 @@ TAC *createArithmeticTAC(TACType type, TAC **newTAC){
 }
 
 TAC *createCallTAC(TAC *id, TAC *arg){
-	return joinTAC(joinTAC(arg, id), tacCreate(TAC_CALL, createLabel(), id->res, NULL));
+	return joinTAC(joinTAC(arg, id), createTAC(TAC_CALL, createLabel(), id->res, NULL));
 }
 
 TAC *createMoveTAC(TACType type, TAC **newTAC){
@@ -137,7 +137,7 @@ TAC *createPrintTAC(TAC *newTAC){
 }
 
 TAC *createRetTAC(TAC *newTAC){
-	return joiNTAC(newTAC, createTAC(TAC_RET, NULL, newTAC->res, NULL));
+	return joinTAC(newTAC, createTAC(TAC_RET, NULL, newTAC->res, NULL));
 }
 
 TAC *createParamTAC(TAC **newTAC){
@@ -332,7 +332,7 @@ TAC *generateCode(AST *node){
 
 TAC *reverseCode(TAC *tac){
 	if (!tac)
-		return NULL
+		return NULL;
 
 	TAC *aux = tac;
 
