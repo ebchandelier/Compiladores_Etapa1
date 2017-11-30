@@ -140,14 +140,61 @@ TAC *createParamTAC(TAC **newTAC){
 	return NULL;
 }
 
-TAC *createIfTAC(TAC **newTAC){
-	//TO-DO
+TAC *createIfTAC(TAC *test, TAC *thenTAC, TAC *elseTAC){
+	HashEntry *labelEnd = createLabel();
+	HashEntry *labelThen = createLabel();
+
+	return
+	joinTAC
+		(joinTAC
+			(joinTAC
+				(joinTAC
+					(joinTAC
+						(joinTAC
+
+						(test, createTAC(TAC_IFZ, labelThen, test->res, NULL))
+					,elseTAC)
+				,createTAC(TAC_JUMP, labelEnd, NULL, NULL))
+			,createTAC(TAC_LABEL, labelThen, NULL, NULL))
+		,thenTAC)
+	,createTAC(TAC_LABEL, labelEnd, NULL, NULL));
+
 	return NULL;
 }
 
-TAC *createWhileTAC(TAC **newTAC){
-	//TO-DO
-	return NULL;
+/*
+START:
+TEST
+IF Z GOTO DO
+JMP END
+DO:
+//CMDS
+JMP START
+END:
+*/
+
+TAC *createWhileTAC(TAC *test, TAC *doWhile){
+	HashEntry *labelEnd = createLabel();
+	HashEntry *labelDo = createLabel();
+	HashEntry *labelStart = createLabel();
+
+	return
+	joinTAC(
+		joinTAC(
+			joinTAC(
+				joinTAC(
+					joinTAC(
+						joinTAC(
+							joinTAC(
+
+							createTAC(TAC_LABEL, labelStart, NULL, NULL), test)
+						,createTAC(TAC_IFZ, labelDo, test->res, NULL))
+					,createTAC(TAC_JUMP, labelEnd, NULL, NULL))
+				,createTAC(TAC_LABEL, labelDo, NULL, NULL))
+			,doWhile)
+		,createTAC(TAC_JUMP, labelStart, NULL, NULL))
+	,createTAC(TAC_LABEL, labelEnd, NULL, NULL));
+
 }
 
 TAC *createFunctionTAC(TAC **newTAC){
@@ -290,11 +337,11 @@ TAC *generateCode(AST *node){
 			break;
 
 		case IF_THEN_ELSE_CMD:
-			result = createIfTAC(newTAC);
+			result = createIfTAC(newTAC[0], newTAC[1], newTAC[2]);
 			break;
 
 		case WHILE_CMD:
-			result = createWhileTAC(newTAC);
+			result = createWhileTAC(newTAC[0], newTAC[1]);
 			break;
 
 		case FUNCTION_HEADER:
