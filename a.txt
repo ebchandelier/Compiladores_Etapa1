@@ -10,14 +10,24 @@ aff : long = 2;
   {
       a1 = 2.0;
 
-    if (1) then 
+    if (a1 < 50) then 
     a1 = a1;
 
     a1 = a1 + 50;
 
+    a1 = a1 * 50;
+
+    aff = -(v[1]);
+
+    v[2] = v[3];
+
     a 3 = v[2];
 
     aff = aff;
+
+    read > a 3;
+
+    print "asdasd";
 
     aff = incn(incn(1,1),1);
 

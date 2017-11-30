@@ -189,7 +189,12 @@ HashEntry *createEndLabel(HashEntry *fun){
 
 TAC *createArithmeticTAC(TACType type, TAC **newTAC){
 	HashEntry *temp1 = newTAC[0]->res;
-	HashEntry *temp2 = newTAC[1]->res;
+	HashEntry *temp2;
+	if (newTAC[1]){
+		temp2 = newTAC[1]->res;
+	}else{
+		temp2 = NULL;
+	}
 
 	return joinTAC(joinTAC(newTAC[0], newTAC[1]), createTAC(type, createLabel(), temp1, temp2));
 }

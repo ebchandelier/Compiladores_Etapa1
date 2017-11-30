@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 
 	if(getErrCount()>0) {
 		fprintf(stderr, "Terminou com erros semantivos\n");
-		exit(4);
+		//exit(4);
 	}
 	
 
