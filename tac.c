@@ -127,11 +127,6 @@ TAC *createCallTAC(TAC *id, TAC *arg){
 	return joinTAC(joinTAC(arg, id), createTAC(TAC_CALL, createLabel(), id->res, NULL));
 }
 
-TAC *createMoveTAC(TACType type, TAC **newTAC){
-	//TO-DO
-	return NULL;
-}
-
 TAC *createPrintTAC(TAC *newTAC){
 	return joinTAC(newTAC, createTAC(TAC_PRINT, NULL, NULL, NULL));
 }
@@ -165,15 +160,21 @@ TAC *createArgTAC(TAC **newTAC){
 	return NULL;
 }
 
-TAC *createValuelistTAC(TAC **newTAC){
-	//TO-DO
-	return NULL;
+TAC *createArrayDecTAC(TAC *id, AST *values){
+	if (!values)
+		return NULL;
+
+	if (values->son[0]){
+		if (!values->son[0]->symbol)
+			return NULL;
+
+		return joinTAC(createArrayDecTAC(id, values->son[1]), createTAC(TAC_ARRAYMOVE, id->res, values->son[0]->symbol, NULL));
+	}else{
+		fprintf(stderr, "Valuelist did not have a value\n");
+		return NULL;
+	}
 }
 
-TAC *createArrayDecTAC(TAC **newTAC){
-	//TO-DO
-	return NULL;
-}
 TAC *generateCode(AST *node){
 	if (!node)
 		return NULL;
@@ -246,21 +247,25 @@ TAC *generateCode(AST *node){
 			result = createArithmeticTAC(TAC_NE, newTAC);
 			break;
 
-
 		case ASSIGNMENT_LIST:
-			result = createArrayDecTAC(newTAC);
+			result = createArrayDecTAC(newTAC[0], node->son[3]);
 			break;
 
 		case ASSIGNMENT:
+			result = createTAC(TAC_MOVE, newTAC[0]->res, newTAC[2]->res, NULL);
+
 		case AST_SYMBOL_ASSIGNMENT:
-			result = createMoveTAC(TAC_MOVE, newTAC);
+			result = joinTAC(newTAC[0], createTAC(TAC_MOVE, node->symbol, newTAC[0]->res, NULL));
 			break;
 
 		case ASSIGNMENT_LIST_INDEX:
-			result = createMoveTAC(TAC_ARRAYMOVE, newTAC);
+			//DOING
+			//ASSIGN TO ARRAY
+			result = joinTAC(newTAC[1], joinTAC(newTAC[0], createTAC(TAC_ARRAYMOVE, node->symbol, newTAC[0]->res, newTAC[1]->res)));
 			break;
 
 		case AST_SYMBOL_ARRAY:
+			//ACCESS ARRAY
 			result = createTAC(TAC_ARRAY_ACCESS, NULL, newTAC[0]->res, newTAC[1]->res);
 			break;
 
@@ -300,13 +305,10 @@ TAC *generateCode(AST *node){
 			result = createArgTAC(newTAC);
 			break;
 
-		case VALUE_LIST:
-			result = createValuelistTAC(newTAC);
-			break;
-
 		case TOKEN:
 		//?????????
 //-----------------------------
+		case VALUE_LIST:
 		case ELSE_CMD:
 		case ARG_LIST:
 		case AST_AT_ARRAY:
