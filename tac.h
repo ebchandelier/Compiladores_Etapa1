@@ -9,6 +9,7 @@ enum TAC_TYPE_ENUM{
 	TAC_SYMBOL,
 	TAC_MOVE,
 	TAC_ARRAYMOVE,
+	TAC_ARRAY_ACCESS,
 	TAC_ADD,
 	TAC_SUB,
 	TAC_MUL,
@@ -51,6 +52,6 @@ void printTAC(TAC *tac);
 HashEntry *createTemp();
 HashEntry *createLabel();
 TAC *generateCode(AST *node);
-TAC *reverseCode(AST *first);
+TAC *reverseCode(TAC *tac);
 
 #endif

@@ -123,11 +123,57 @@ TAC *createArithmeticTAC(TACType type, TAC **newTAC){
 	return joinTAC(joinTAC(newTAC[1], newTAC[0]), createTAC(type, createTemp(), temp1, temp2));
 }
 
+TAC *createCallTAC(TAC *id, TAC *arg){
+	return joinTAC(joinTAC(arg, id), tacCreate(TAC_CALL, createLabel(), id->res, NULL));
+}
+
 TAC *createMoveTAC(TACType type, TAC **newTAC){
 	//TO-DO
 	return NULL;
 }
 
+TAC *createPrintTAC(TAC *newTAC){
+	return joinTAC(newTAC, createTAC(TAC_PRINT, NULL, NULL, NULL));
+}
+
+TAC *createRetTAC(TAC *newTAC){
+	return joiNTAC(newTAC, createTAC(TAC_RET, NULL, newTAC->res, NULL));
+}
+
+TAC *createParamTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
+
+TAC *createIfTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
+
+TAC *createWhileTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
+
+TAC *createFunctionTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
+
+TAC *createArgTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
+
+TAC *createValuelistTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
+
+TAC *createArrayDecTAC(TAC **newTAC){
+	//TO-DO
+	return NULL;
+}
 TAC *generateCode(AST *node){
 	if (!node)
 		return NULL;
@@ -138,8 +184,6 @@ TAC *generateCode(AST *node){
 	newTAC[2] = generateCode(node->son[2]);
 	newTAC[1] = generateCode(node->son[1]);
 	newTAC[0] = generateCode(node->son[0]);
-
-	//Process each node
 
 	TAC *result = NULL;
 
@@ -204,8 +248,8 @@ TAC *generateCode(AST *node){
 
 
 		case ASSIGNMENT_LIST:
-			//TO-DO
-			//arraydec
+			result = createArrayDecTAC(newTAC);
+			break;
 
 		case ASSIGNMENT:
 		case AST_SYMBOL_ASSIGNMENT:
@@ -216,45 +260,56 @@ TAC *generateCode(AST *node){
 			result = createMoveTAC(TAC_ARRAYMOVE, newTAC);
 			break;
 
+		case AST_SYMBOL_ARRAY:
+			result = createTAC(TAC_ARRAY_ACCESS, NULL, newTAC[0]->res, newTAC[1]->res);
+			break;
+
 		case READ_CMD:
 			result = createTAC(TAC_READ, newTAC[0]->res, NULL, NULL);
 			break;
 
 		case PRINT_CMD:
-			result = joinTAC(newTAC[0], createTAC(TAC_PRINT, NULL, NULL, NULL));
+			result = createPrintTAC(newTAC[0]); 
+			break;
+
+		case AST_FUN_CAL:
+			result = createCallTAC(newTAC[0], newTAC[1]);
 			break;
 
 		case RETURN_CMD:
-		case IF_THEN_ELSE_CMD:
-		case WHILE_CMD:
-		
-		case AST_AT_ARRAY:
-		case AST_SYMBOL_ARRAY:
-		
-		case AST_FUN_CAL:
-		
+			result = createRetTAC(newTAC[0]);
+			break;
+
 		case AST_PARAM_LIST:
+			result = createParamTAC(newTAC);
+			break;
 
-		case ELSE_CMD:
+		case IF_THEN_ELSE_CMD:
+			result = createIfTAC(newTAC);
+			break;
 
+		case WHILE_CMD:
+			result = createWhileTAC(newTAC);
+			break;
 
-		
-		
 		case FUNCTION_HEADER:
-			//create label?
-
-		case ARG_LIST:
-			//create temp?
+			result = createFunctionTAC(newTAC);
+			break;
 
 		case ARGUMENT:
-			//create temp?
+			result = createArgTAC(newTAC);
+			break;
 
 		case VALUE_LIST:
-			//declaration, what do???
+			result = createValuelistTAC(newTAC);
+			break;
 
 		case TOKEN:
 		//?????????
 //-----------------------------
+		case ELSE_CMD:
+		case ARG_LIST:
+		case AST_AT_ARRAY:
 		case PRINT_CONTENT:
 		case FUNCTION_BODY:
 		case PARENTESES:
@@ -275,6 +330,15 @@ TAC *generateCode(AST *node){
 	return result;
 }
 
-TAC *reverseCode(AST *first){
-	//TO-DO
+TAC *reverseCode(TAC *tac){
+	if (!tac)
+		return NULL
+
+	TAC *aux = tac;
+
+	while (aux->prev)
+		aux = aux->prev;
+
+
+	return aux;
 }
