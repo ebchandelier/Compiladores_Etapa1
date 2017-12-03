@@ -196,7 +196,7 @@ TAC *createArithmeticTAC(TACType type, TAC **newTAC){
 		temp2 = NULL;
 	}
 
-	return joinTAC(joinTAC(newTAC[0], newTAC[1]), createTAC(type, createLabel(), temp1, temp2));
+	return joinTAC(joinTAC(newTAC[0], newTAC[1]), createTAC(type, createTemp(), temp1, temp2));
 }
 
 TAC *createCallTAC(TAC *id, TAC *arg){
