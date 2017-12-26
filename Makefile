@@ -10,7 +10,7 @@
 
 
 etapa1:etapa2 lex.yy.c
-	gcc -o etapa5 ast.c lex.yy.c y.tab.c semantic.c tac.c
+	gcc -o etapa6 ast.c lex.yy.c y.tab.c semantic.c tac.c assembly.c
 
 etapa2: parser.y
 	yacc -d parser.y
@@ -19,4 +19,4 @@ lex.yy.c: scanner.l
 	lex scanner.l
 
 clean:
-	rm lex.yy.c etapa5 y.tab.c y.tab.h
+	rm lex.yy.c etapa6 y.tab.c y.tab.h

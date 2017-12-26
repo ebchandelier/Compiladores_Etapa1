@@ -1,4 +1,5 @@
 #include "tac.h"
+#include "assembly.h"
 
 extern FILE *yyin;
 
