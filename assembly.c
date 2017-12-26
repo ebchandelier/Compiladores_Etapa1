@@ -9,6 +9,22 @@
 
 FILE* file;
 
+void generateAssembly_begin_fun(HashEntry* node)
+{
+	fprintf(file,"\t.globl	%s\n", node->key);
+	fprintf(file,"\t.type	%s, @function\n", node->key);
+
+	fprintf(file,"\t%s:\n", node->key);
+	//fprintf(file,"\t.LFB%d:\n", functions_count);
+	fprintf(file,"\t\t.cfi_startproc\n");
+	fprintf(file,"\t\tpushq	%%rbp\n");
+	fprintf(file,"\t\t.cfi_def_cfa_offset 16\n");
+	fprintf(file,"\t\t.cfi_offset 6, -16\n");
+	fprintf(file,"\t\tmovq	%%rsp, %%rbp\n");
+	fprintf(file,"\t\t.cfi_def_cfa_register 6\n\n");
+}
+
+
 void generateAssembly_move(HashEntry* res, HashEntry* source)
 {
     char* resString = res->key;//  lvalue(res);
@@ -47,6 +63,7 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_SYMBOL: 		break;
 		case TAC_MOVE: 			generateAssembly_move(tac->res, tac->op1); break;
 		case TAC_ARRAYMOVE: 	generateAssembly_arrayMove(tac->res, tac->op1); break;
+		case TAC_BEGINFUN:		generateAssembly_begin_fun(tac->res); break;
 		default:
 			fprintf(stderr, "FAZER O %d\n", tac->type);
 			break;
