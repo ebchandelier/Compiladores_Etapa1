@@ -54,10 +54,13 @@ int main(int argc, char** argv) {
 
 	//ETAPA 5
 	initTAC(hashtable);
-	TAC *first = generateCode(astRoot);
-	printTAC(reverseCode(first));
+	TAC *last = generateCode(astRoot);
+	
+	TAC *first = reverseCode(last);
 
+	printTAC(first);
 
+	generateAssembly(first, argv[2]);
 
 	if(getErrCount()>0) {
 		fprintf(stderr, "Terminou com erros semantivos\n");
