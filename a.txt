@@ -1,14 +1,14 @@
 // UFRGS - Compiladores - Marcelo Johann - 2017/2
 
-a 3: short = 0;
+a 3: short = 110;
 a 4 : float = 2.0;
 a1 : float = 0.0;
-v: long[10] 1 2 3 4 5 6 7 8 9 10; 
+v: long[10] 10 20 30 40 50 60 70 80 90 100;
 aff : long = 2;
 
 (long) incn (x: long, n: long)
   {
-      a1 = 2.0;
+      /*a1 = 2.0;
 
     if (a1 < 50) then 
     a1 = a1;
@@ -32,5 +32,5 @@ aff : long = 2;
     aff = incn(incn(1,1),1);
 
     return (x+n);
-
+*/
     }

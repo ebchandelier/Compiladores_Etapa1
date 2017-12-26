@@ -397,9 +397,11 @@ TAC *generateCode(AST *node){
 			break;
 
 		case ASSIGNMENT:
-			result = createTAC(TAC_MOVE, newTAC[0]->res, newTAC[2]->res, NULL);
+		result =  joinTAC(newTAC[0], createTAC(TAC_MOVE, newTAC[0]->res, newTAC[2]->res, NULL));
+			break;
+		
+			case AST_SYMBOL_ASSIGNMENT:
 
-		case AST_SYMBOL_ASSIGNMENT:
 			result = joinTAC(newTAC[0], createTAC(TAC_MOVE, node->symbol, newTAC[0]->res, NULL));
 			break;
 

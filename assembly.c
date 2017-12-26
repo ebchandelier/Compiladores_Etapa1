@@ -23,22 +23,39 @@ void generateAssembly_move(HashEntry* res, HashEntry* source)
 	//free(sourceString);
 }
 
+void generateAssembly_arrayMove(HashEntry* res, HashEntry* source)
+{
+	char* resString = res->key;// lvalue(res);
+	char* sourceString = source->key;// rvalue(source);
+
+	fprintf(file,"\t\t# STARTING MOVE TO ARRAY\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", sourceString);
+	fprintf(file,"\t\t\tmovl %%edx, %s\n", resString);
+	fprintf(file,"\t\t# ENDING MOVE TO ARRAY\n\n");
+
+	//free(resString);
+	//free(sourceString);
+}
+
+
 void generateAssemblyOf(TAC* tac)
 {
 
-    fprintf(stderr, "GENERATE ASSEMBL OF\n");
 	//fprintf(stderr, "%d\n", tac->tac_type);
 	switch(tac->type)
 	{
-		case TAC_SYMBOL: break;
-        //case TAC_MOVE: 			generateAssembly_move(tac->res, tac->op1); break;
+		case TAC_SYMBOL: 		break;
+		case TAC_MOVE: 			generateAssembly_move(tac->res, tac->op1); break;
+		case TAC_ARRAYMOVE: 	generateAssembly_arrayMove(tac->res, tac->op1); break;
+		default:
+			fprintf(stderr, "FAZER O %d\n", tac->type);
+			break;
     }
 }
 
 void generateAssembly(TAC* tacs, const char* filename)
 {
 
-    fprintf(stderr, "GENERATE ASSEM\n");
 	TAC* aux;
     
     file = fopen(filename, "w");
