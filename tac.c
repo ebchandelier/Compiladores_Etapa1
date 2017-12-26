@@ -114,19 +114,16 @@ void printTAC(TAC *tac){
 	};
 
 	for (aux = tac; aux != NULL; aux = aux->next){
+		
+		fprintf(stderr, "%s ", tacNames[aux->type]);
+		
+		if(aux->res) { fprintf(stderr, "%s ", aux->res->key); }
 
-		if(aux->op1 && aux->op2) {
+		if(aux->op1) { fprintf(stderr, "%s ", aux->op1->key); }
 
-			fprintf(stderr, "%s %s %s\n", tacNames[aux->type], aux->op1->key, aux->op2->key);
+		if(aux->op2) { fprintf(stderr, "%s", aux->op2->key); }
 
-		} else if( aux->op1) {
-
-			fprintf(stderr, "%s %s\n", tacNames[aux->type], aux->op1->key);
-
-		} else {
-
-			fprintf(stderr, "%s\n", tacNames[aux->type]);
-		}
+		fprintf(stderr, "\n");
 	}
 }
 
