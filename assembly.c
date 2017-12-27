@@ -9,13 +9,15 @@
 
 FILE* file;
 
+int functions_count = 0;
+
 void generateAssembly_begin_fun(HashEntry* node)
 {
 	fprintf(file,"\t.globl	%s\n", node->key);
 	fprintf(file,"\t.type	%s, @function\n", node->key);
 
 	fprintf(file,"\t%s:\n", node->key);
-	//fprintf(file,"\t.LFB%d:\n", functions_count);
+	fprintf(file,"\t.LFB%d:\n", functions_count);
 	fprintf(file,"\t\t.cfi_startproc\n");
 	fprintf(file,"\t\tpushq	%%rbp\n");
 	fprintf(file,"\t\t.cfi_def_cfa_offset 16\n");
@@ -53,6 +55,24 @@ void generateAssembly_arrayMove(HashEntry* res, HashEntry* source)
 	//free(sourceString);
 }
 
+void generateAssembly_label(HashEntry* res)
+{
+
+	fprintf(file,"\t\t\t%s:\n", res->key);
+}
+
+void generateAssembly_arg(HashEntry* source)
+{
+	char* sourceString = source->key;// rvalue(source);
+
+	fprintf(file,"\t\t# STARTING ARG\n");
+	fprintf(file,"\t\t\tsubq	$8, %%rsp\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", sourceString);
+	fprintf(file,"\t\t\tmovl %%edx, (%%rsp)\n"/*, argCount * 8*/);
+	fprintf(file,"\t\t# ENDING ARG\n\n");
+
+	free(sourceString);
+}
 
 void generateAssemblyOf(TAC* tac)
 {
@@ -64,6 +84,8 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_MOVE: 			generateAssembly_move(tac->res, tac->op1); break;
 		case TAC_ARRAYMOVE: 	generateAssembly_arrayMove(tac->res, tac->op1); break;
 		case TAC_BEGINFUN:		generateAssembly_begin_fun(tac->res); break;
+		case TAC_LABEL:			generateAssembly_label(tac->res); break;
+		case TAC_ARG:			generateAssembly_arg(tac->res); break;
 		default:
 			fprintf(stderr, "FAZER O %d\n", tac->type);
 			break;
