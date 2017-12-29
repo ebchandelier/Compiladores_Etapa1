@@ -26,6 +26,14 @@ void generateAssembly_begin_fun(HashEntry* node)
 	fprintf(file,"\t\t.cfi_def_cfa_register 6\n\n");
 }
 
+void generateAssembly_end_fun(HashEntry* node)
+{
+	fprintf(file,"\t.LFE%d:\n", functions_count);
+	fprintf(file,"\t\t.size	%s, .-%s\n\n", node->key, node->key);
+
+	functions_count++;
+}
+
 
 void generateAssembly_move(HashEntry* res, HashEntry* source)
 {
@@ -86,6 +94,7 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_BEGINFUN:		generateAssembly_begin_fun(tac->res); break;
 		case TAC_LABEL:			generateAssembly_label(tac->res); break;
 		case TAC_ARG:			generateAssembly_arg(tac->res); break;
+		case TAC_ENDFUN:		generateAssembly_end_fun(tac->res); break;	
 		default:
 			fprintf(stderr, "FAZER O %d\n", tac->type);
 			break;

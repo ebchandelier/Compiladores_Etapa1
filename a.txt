@@ -8,7 +8,7 @@ aff : long = 2;
 
 (long) incn (x: long, n: long)
   {
-      /*a1 = 2.0;
+    a1 = 2.0;
 
     if (a1 < 50) then 
     a1 = a1;
@@ -32,5 +32,5 @@ aff : long = 2;
     aff = incn(incn(1,1),1);
 
     return (x+n);
-*/
+
     }
