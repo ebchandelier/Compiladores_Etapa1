@@ -11,6 +11,23 @@ FILE* file;
 
 int functions_count = 0;
 
+void generateAssembly_arrayAccess(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;// rvalue(source1);
+
+	fprintf(file,"\t\t# STARTING ARRAYACCESS\n");
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source1String);
+	fprintf(file,"\t\t\tcltq\n");
+	fprintf(file,"\t\t\tmovl %s(,%%rax,4), %%eax\n", source2->key);
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING ARRAYACCESS\n\n");
+
+//	free(resString);
+//	free(source1String);
+}
+
+
 void generateAssembly_begin_fun(HashEntry* node)
 {
 	fprintf(file,"\t.globl	%s\n", node->key);
@@ -79,7 +96,7 @@ void generateAssembly_arg(HashEntry* source)
 	fprintf(file,"\t\t\tmovl %%edx, (%%rsp)\n"/*, argCount * 8*/);
 	fprintf(file,"\t\t# ENDING ARG\n\n");
 
-	free(sourceString);
+	//free(sourceString);
 }
 
 void generateAssemblyOf(TAC* tac)
@@ -95,6 +112,7 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_LABEL:			generateAssembly_label(tac->res); break;
 		case TAC_ARG:			generateAssembly_arg(tac->res); break;
 		case TAC_ENDFUN:		generateAssembly_end_fun(tac->res); break;	
+		case TAC_ARRAY_ACCESS: 	generateAssembly_arrayAccess(tac->res, tac->op2, NULL); break;
 		default:
 			fprintf(stderr, "FAZER O %d\n", tac->type);
 			break;
