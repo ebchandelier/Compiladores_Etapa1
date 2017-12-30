@@ -7,9 +7,74 @@
 #include "y.tab.h"
 #include "assembly.h"
 
+#define sMOVE "MOVE"
+#define sARRAYMOVE "ARRAY MOVE"
+#define sBEGINFUN "BEGINFUN"
+#define sENDFUN "ENDFUN"
+#define sLABEL "LABEL"
+#define sARG "ARG"
+#define sARRAYACCESS "ARRAY ACCESS"
+#define sLT "LESS THAN"
+#define sLE "LESSER OR EQUAL"
+#define sGT "GREATER THAN"
+#define sGE "GREATER OR EQUAL"
+#define sEQ "EQUAL"
+#define sNE "NOT EQUAL"
+#define sAND "AND"
+#define sOR "OR"
+#define sSYMBOL "SYMBOL"
+#define sINVALID "NOT VALID"
+#define sPARAM "PARAM"
+#define sADD "ADD"
+#define sSUB "SUB"
+#define sMUL "MUL"
+#define sDIV "DIV"
+#define sINV "INV"
+#define sIFZ "IFZ"
+#define sJUMP "JUMP"
+#define sCALL "CALL"
+#define sRET "RETURN"
+#define sPRINT "PRINT"
+#define sREAD "READ"
+
 FILE* file;
 
 int functions_count = 0;
+
+char* type_to_string(int type){
+	switch(type){
+		case TAC_SYMBOL: 		return sSYMBOL;
+		case TAC_MOVE: 			return sMOVE;
+		case TAC_ARRAYMOVE: 	return sARRAYMOVE;
+		case TAC_BEGINFUN:		return sBEGINFUN;
+		case TAC_LABEL:			return sLABEL;
+		case TAC_ARG:			return sARG;
+		case TAC_ENDFUN:		return sENDFUN;
+		case TAC_ARRAY_ACCESS: 	return sARRAYACCESS;
+		case TAC_LT:			return sLT;
+		case TAC_LE: 			return sLE;
+		case TAC_GT: 			return sGT;
+		case TAC_GE: 			return sGE;
+		case TAC_EQ: 			return sEQ;
+		case TAC_NE: 			return sNE;
+		case TAC_AND: 			return sAND;
+		case TAC_OR: 			return sOR;
+		case TAC_PARAM: 		return sPARAM;
+		case TAC_ADD: 			return sADD;
+		case TAC_SUB: 			return sSUB;
+		case TAC_MUL: 			return sMUL;
+		case TAC_DIV: 			return sDIV;
+		case TAC_INV:			return sINV;
+		case TAC_IFZ:			return sIFZ;
+		case TAC_JUMP:			return sJUMP;
+		case TAC_CALL:			return sCALL;
+		case TAC_RET:			return sRET;
+		case TAC_PRINT:			return sPRINT;
+		case TAC_READ:			return sREAD;
+		default:				return sINVALID;
+	}
+		
+}
 
 void generateAssembly_less(HashEntry* res, HashEntry* source1, HashEntry* source2)
 {
@@ -202,6 +267,7 @@ void generateAssembly_begin_fun(HashEntry* node)
 
 void generateAssembly_end_fun(HashEntry* node)
 {
+	fprintf(stderr, "Ending fun\n");
 	fprintf(file,"\t.LFE%d:\n", functions_count);
 	fprintf(file,"\t\t.size	%s, .-%s\n\n", node->key, node->key);
 
@@ -258,7 +324,7 @@ void generateAssembly_arg(HashEntry* source)
 
 void generateAssemblyOf(TAC* tac)
 {
-
+	int done = 1;
 	//fprintf(stderr, "%d\n", tac->tac_type);
 	switch(tac->type)
 	{
@@ -279,8 +345,12 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_AND: 			generateAssembly_and(tac->res, tac->op1, tac->op2); break;
 		case TAC_OR: 			generateAssembly_or(tac->res, tac->op1, tac->op2); break;
 		default:
-			fprintf(stderr, "FAZER O %d\n", tac->type);
+			done = 0;
+			fprintf(stderr, "FAZER O %s\n", type_to_string(tac->type));
 			break;
+    }
+    if (done){
+    	fprintf(stderr, "DONE: %s\n", type_to_string(tac->type));
     }
 }
 
