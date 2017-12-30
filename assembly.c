@@ -149,6 +149,24 @@ void generateAssembly_and(HashEntry* res, HashEntry* source1, HashEntry* source2
 	// free(source2String);
 }
 
+void generateAssembly_or(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;// lvalue(res);
+	char* source1String = source1->key; // rvalue(source1);
+	char* source2String = source2->key; //  rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING OR\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\torl %%edx, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING OR\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
 
 void generateAssembly_arrayAccess(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
@@ -258,8 +276,8 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_GE: 			generateAssembly_greater_equal(tac->res, tac->op1, tac->op2); break;
 		case TAC_EQ: 			generateAssembly_equal(tac->res, tac->op1, tac->op2); break;
 		case TAC_NE: 			generateAssembly_not_equal(tac->res, tac->op1, tac->op2); break;
-		//case TAC_AND: 			generateAssembly_and(tac->res, tac->op1, tac->op2); break;
-		//case TAC_OR: 			generateAssembly_or(tac->res, tac->op1, tac->op2); break;
+		case TAC_AND: 			generateAssembly_and(tac->res, tac->op1, tac->op2); break;
+		case TAC_OR: 			generateAssembly_or(tac->res, tac->op1, tac->op2); break;
 		default:
 			fprintf(stderr, "FAZER O %d\n", tac->type);
 			break;

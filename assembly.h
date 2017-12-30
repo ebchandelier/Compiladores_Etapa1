@@ -15,4 +15,4 @@ void generateAssembly_greater_equal(HashEntry* res, HashEntry* source1, HashEntr
 void generateAssembly_equal(HashEntry* res, HashEntry* source1, HashEntry* source2);
 void generateAssembly_not_equal(HashEntry* res, HashEntry* source1, HashEntry* source2);
 void generateAssembly_and(HashEntry* res, HashEntry* source1, HashEntry* source2);
-void generateAssembly_arrayAccess(HashEntry* res, HashEntry* op1, HashEntry* op2);
+void generateAssembly_or(HashEntry* res, HashEntry* source1, HashEntry* source2);
