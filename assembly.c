@@ -11,15 +11,154 @@ FILE* file;
 
 int functions_count = 0;
 
-void generateAssembly_arrayAccess(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_less(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;//rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING LESS\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tcmpl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsetl %%al\n");
+	fprintf(file,"\t\t\tmovzbl %%al, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING LESS\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_less_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;//rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING LESS EQUAL\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tcmpl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsetle %%al\n");
+	fprintf(file,"\t\t\tmovzbl %%al, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING LESS EQUAL\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_greater(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;//rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING GREATER\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tcmpl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsetg %%al\n");
+	fprintf(file,"\t\t\tmovzbl %%al, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING GREATER\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_greater_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;//rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING GREATER EQUAL\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tcmpl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsetge %%al\n");
+	fprintf(file,"\t\t\tmovzbl %%al, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING GREATER EQUAL\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;//rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING EQUAL\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tcmpl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsete %%al\n");
+	fprintf(file,"\t\t\tmovzbl %%al, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING EQUAL\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_not_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = source1->key;//rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING NOT EQUAL\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tcmpl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsetne %%al\n");
+	fprintf(file,"\t\t\tmovzbl %%al, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING NOT EQUAL\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_and(HashEntry* res, HashEntry* source1, HashEntry* source2)
 {
 	char* resString = res->key;//lvalue(res);
 	char* source1String = source1->key;// rvalue(source1);
+	char* source2String = source2->key;//rvalue(source2);
+
+	fprintf(file,"\t\t# STARTING AND\n");
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source2String);
+	fprintf(file,"\t\t\tandl %%edx, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING AND\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+
+void generateAssembly_arrayAccess(HashEntry* res, HashEntry* op1, HashEntry* op2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = op1->key;// rvalue(op1);
 
 	fprintf(file,"\t\t# STARTING ARRAYACCESS\n");
 	fprintf(file,"\t\t\tmovl %s, %%eax\n", source1String);
 	fprintf(file,"\t\t\tcltq\n");
-	fprintf(file,"\t\t\tmovl %s(,%%rax,4), %%eax\n", source2->key);
+	fprintf(file,"\t\t\tmovl %s(,%%rax,4), %%eax\n", op2->key);
 	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
 	fprintf(file,"\t\t# ENDING ARRAYACCESS\n\n");
 
@@ -113,6 +252,14 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_ARG:			generateAssembly_arg(tac->res); break;
 		case TAC_ENDFUN:		generateAssembly_end_fun(tac->res); break;	
 		case TAC_ARRAY_ACCESS: 	generateAssembly_arrayAccess(tac->res, tac->op2, NULL); break;
+		case TAC_LT:			generateAssembly_less(tac->res, tac->op1, tac->op2); break;
+		case TAC_LE: 			generateAssembly_less_equal(tac->res, tac->op1, tac->op2); break;
+		case TAC_GT: 			generateAssembly_greater(tac->res, tac->op1, tac->op2); break;
+		case TAC_GE: 			generateAssembly_greater_equal(tac->res, tac->op1, tac->op2); break;
+		case TAC_EQ: 			generateAssembly_equal(tac->res, tac->op1, tac->op2); break;
+		case TAC_NE: 			generateAssembly_not_equal(tac->res, tac->op1, tac->op2); break;
+		//case TAC_AND: 			generateAssembly_and(tac->res, tac->op1, tac->op2); break;
+		//case TAC_OR: 			generateAssembly_or(tac->res, tac->op1, tac->op2); break;
 		default:
 			fprintf(stderr, "FAZER O %d\n", tac->type);
 			break;
