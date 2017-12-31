@@ -335,7 +335,7 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_LABEL:			generateAssembly_label(tac->res); break;
 		case TAC_ARG:			generateAssembly_arg(tac->res); break;
 		case TAC_ENDFUN:		generateAssembly_end_fun(tac->res); break;	
-		case TAC_ARRAY_ACCESS: 	generateAssembly_arrayAccess(tac->res, tac->op2, NULL); break;
+		case TAC_ARRAY_ACCESS: 	generateAssembly_arrayAccess(tac->res, tac->op1, tac->op2); break;
 		case TAC_LT:			generateAssembly_less(tac->res, tac->op1, tac->op2); break;
 		case TAC_LE: 			generateAssembly_less_equal(tac->res, tac->op1, tac->op2); break;
 		case TAC_GT: 			generateAssembly_greater(tac->res, tac->op1, tac->op2); break;
@@ -346,7 +346,7 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_OR: 			generateAssembly_or(tac->res, tac->op1, tac->op2); break;
 		default:
 			done = 0;
-			fprintf(stderr, "FAZER O %s\n", type_to_string(tac->type));
+			fprintf(stderr, "->FAZER O %s\n", type_to_string(tac->type));
 			break;
     }
     if (done){
@@ -369,6 +369,9 @@ void generateAssembly(TAC* tacs, const char* filename)
 
 	for(aux = tacs; aux != NULL; aux = aux->next)
 	{
+		fprintf(stderr, "fazendo %s\n", type_to_string(aux->type));
 		generateAssemblyOf(aux);
 	}
+
+	close(file);
 }

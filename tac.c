@@ -117,11 +117,11 @@ void printTAC(TAC *tac){
 		
 		fprintf(stderr, "%s ", tacNames[aux->type]);
 		
-		if(aux->res) { fprintf(stderr, "%s ", aux->res->key); }
+		if(aux->res) { fprintf(stderr, "res:%s ", aux->res->key); }
 
-		if(aux->op1) { fprintf(stderr, "%s ", aux->op1->key); }
+		if(aux->op1) { fprintf(stderr, "op1:%s ", aux->op1->key); }
 
-		if(aux->op2) { fprintf(stderr, "%s", aux->op2->key); }
+		if(aux->op2) { fprintf(stderr, "op2:%s", aux->op2->key); }
 
 		fprintf(stderr, "\n");
 	}
@@ -413,7 +413,7 @@ TAC *generateCode(AST *node){
 
 		case AST_SYMBOL_ARRAY:
 			//ACCESS ARRAY
-			result = createTAC(TAC_ARRAY_ACCESS, NULL, node->symbol, newTAC[0]->res);
+			result = createTAC(TAC_ARRAY_ACCESS, createTemp(), node->symbol, newTAC[0]->res);
 			break;
 
 		case READ_CMD:
