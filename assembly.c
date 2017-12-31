@@ -76,11 +76,86 @@ char* type_to_string(int type){
 		
 }
 
-void generateAssembly_less(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_add(HashEntry* res, HashEntry* op1, HashEntry* op2)
+{
+	char* resString = res->key;//  lvalue(res);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
+
+	fprintf(file,"\t\t# STARTING ADD\n");
+	fprintf(file,"\t\t\tmovl	%s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl	%s, %%eax\n", source2String);
+	fprintf(file,"\t\t\taddl %%edx, %%eax\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING ADD\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_sub(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;//rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
+
+	fprintf(file,"\t\t# STARTING SUB\n");
+	fprintf(file,"\t\t\tmovl	%s, %%eax\n", source1String);
+	fprintf(file,"\t\t\tmovl	%s, %%edx\n", source2String);
+	fprintf(file,"\t\t\tsubl	%%edx, %%eax\n");
+	fprintf(file,"\t\t\tmovl	%%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING SUB\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_mul(HashEntry* res, HashEntry* op1, HashEntry* op2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
+
+	fprintf(file,"\t\t# STARTING MUL\n");
+	fprintf(file,"\t\t\tmovl	%s, %%edx\n", source1String);
+	fprintf(file,"\t\t\tmovl	%s, %%eax\n", source2String);
+	fprintf(file,"\t\t\timul	%%edx, %%eax\n");
+	fprintf(file,"\t\t\tmovl	%%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING MUL\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_div(HashEntry* res, HashEntry* op1, HashEntry* op2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
+
+	fprintf(file,"\t\t# STARTING DIV\n");
+	fprintf(file,"\t\t\tmovl %s, %%eax\n", source1String);
+	fprintf(file,"\t\t\tmovl %s, %%edx\n", source2String);
+	fprintf(file,"\t\t\tmovl %%edx, -4(%%rbp)\n");
+	fprintf(file,"\t\t\tmovl %%eax, %%edx\n");
+	fprintf(file,"\t\t\tsarl $31, %%edx\n");
+	fprintf(file,"\t\t\tidivl -4(%%rbp)\n");
+	fprintf(file,"\t\t\tmovl %%eax, %s\n", resString);
+	fprintf(file,"\t\t# ENDING DIV\n\n");
+
+	// free(resString);
+	// free(source1String);
+	// free(source2String);
+}
+
+void generateAssembly_less(HashEntry* res, HashEntry* op1, HashEntry* op2)
+{
+	char* resString = res->key;//lvalue(res);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING LESS\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -96,11 +171,11 @@ void generateAssembly_less(HashEntry* res, HashEntry* source1, HashEntry* source
 	// free(source2String);
 }
 
-void generateAssembly_less_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_less_equal(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;//rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING LESS EQUAL\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -116,11 +191,11 @@ void generateAssembly_less_equal(HashEntry* res, HashEntry* source1, HashEntry* 
 	// free(source2String);
 }
 
-void generateAssembly_greater(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_greater(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;//rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING GREATER\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -136,11 +211,11 @@ void generateAssembly_greater(HashEntry* res, HashEntry* source1, HashEntry* sou
 	// free(source2String);
 }
 
-void generateAssembly_greater_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_greater_equal(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;//rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING GREATER EQUAL\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -156,11 +231,11 @@ void generateAssembly_greater_equal(HashEntry* res, HashEntry* source1, HashEntr
 	// free(source2String);
 }
 
-void generateAssembly_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_equal(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;//rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING EQUAL\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -176,11 +251,11 @@ void generateAssembly_equal(HashEntry* res, HashEntry* source1, HashEntry* sourc
 	// free(source2String);
 }
 
-void generateAssembly_not_equal(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_not_equal(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;//rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;//rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING NOT EQUAL\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -196,11 +271,11 @@ void generateAssembly_not_equal(HashEntry* res, HashEntry* source1, HashEntry* s
 	// free(source2String);
 }
 
-void generateAssembly_and(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_and(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;//lvalue(res);
-	char* source1String = source1->key;// rvalue(source1);
-	char* source2String = source2->key;//rvalue(source2);
+	char* source1String = op1->key;// rvalue(op1);
+	char* source2String = op2->key;//rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING AND\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -214,11 +289,11 @@ void generateAssembly_and(HashEntry* res, HashEntry* source1, HashEntry* source2
 	// free(source2String);
 }
 
-void generateAssembly_or(HashEntry* res, HashEntry* source1, HashEntry* source2)
+void generateAssembly_or(HashEntry* res, HashEntry* op1, HashEntry* op2)
 {
 	char* resString = res->key;// lvalue(res);
-	char* source1String = source1->key; // rvalue(source1);
-	char* source2String = source2->key; //  rvalue(source2);
+	char* source1String = op1->key; // rvalue(op1);
+	char* source2String = op2->key; //  rvalue(op2);
 
 	fprintf(file,"\t\t# STARTING OR\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", source1String);
@@ -344,6 +419,10 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_NE: 			generateAssembly_not_equal(tac->res, tac->op1, tac->op2); break;
 		case TAC_AND: 			generateAssembly_and(tac->res, tac->op1, tac->op2); break;
 		case TAC_OR: 			generateAssembly_or(tac->res, tac->op1, tac->op2); break;
+		case TAC_ADD: 			generateAssembly_add(tac->res, tac->op1, tac->op2); break;
+		case TAC_SUB: 			generateAssembly_sub(tac->res, tac->op1, tac->op2); break;
+		case TAC_MUL: 			generateAssembly_mul(tac->res, tac->op1, tac->op2); break;
+		case TAC_DIV: 			generateAssembly_div(tac->res, tac->op1, tac->op2); break;
 		default:
 			done = 0;
 			fprintf(stderr, "->FAZER O %s\n", type_to_string(tac->type));

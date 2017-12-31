@@ -16,3 +16,7 @@ void generateAssembly_equal(HashEntry* res, HashEntry* source1, HashEntry* sourc
 void generateAssembly_not_equal(HashEntry* res, HashEntry* source1, HashEntry* source2);
 void generateAssembly_and(HashEntry* res, HashEntry* source1, HashEntry* source2);
 void generateAssembly_or(HashEntry* res, HashEntry* source1, HashEntry* source2);
+void generateAssembly_add(HashEntry* res, HashEntry* op1, HashEntry* op2);
+void generateAssembly_sub(HashEntry* res, HashEntry* op1, HashEntry* op2);
+void generateAssembly_mul(HashEntry* res, HashEntry* op1, HashEntry* op2);
+void generateAssembly_div(HashEntry* res, HashEntry* op1, HashEntry* op2);
