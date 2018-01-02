@@ -429,7 +429,7 @@ void generateAssemblyOf(TAC* tac)
 			break;
     }
     if (done){
-    	fprintf(stderr, "DONE: %s\n", type_to_string(tac->type));
+    	//fprintf(stderr, "DONE: %s\n", type_to_string(tac->type));
     }
 }
 
@@ -448,9 +448,9 @@ void generateAssembly(TAC* tacs, const char* filename)
 
 	for(aux = tacs; aux != NULL; aux = aux->next)
 	{
-		fprintf(stderr, "fazendo %s\n", type_to_string(aux->type));
+		//fprintf(stderr, "fazendo %s\n", type_to_string(aux->type));
 		generateAssemblyOf(aux);
 	}
 
-	close(file);
+	fclose(file);
 }
