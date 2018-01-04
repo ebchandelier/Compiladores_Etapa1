@@ -17,7 +17,7 @@ aff : long = 2;
 
     a1 = a1 * 50;
 
-    //aff = - aff;
+    aff = - aff;
 
     v[2] = v[3];
 

@@ -459,6 +459,15 @@ void generateAssembly_ret(HashEntry* res){
 
 }
 
+void generateAssembly_inv(HashEntry* res, HashEntry* op){
+
+	fprintf(file,"\t\t# STARTING INV\n");
+	fprintf(file,"\t\t\tmovl	%s, %%edx\n", op->key);
+	fprintf(file,"\t\t\tnegl %%edx\n");
+	fprintf(file,"\t\t\tmovl %%edx, %s\n", res->key);
+	fprintf(file,"\t\t# ENDING INV\n\n");
+}
+
 
 
 void generateAssemblyOf(TAC* tac)
@@ -494,7 +503,7 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_PRINT:			generateAssembly_print(); break;
 		case TAC_CALL:			generateAssembly_call(tac->op1, tac->res); arg_count = 0; break;
 		case TAC_RET:			generateAssembly_ret(tac->op1); break;
-		case TAC_INV: 			//TO-DO
+		case TAC_INV: 			generateAssembly_inv(tac->res, tac->op1); break;
 		default:
 			done = 0;
 			fprintf(stderr, "->FAZER O %s\n", type_to_string(tac->type));
