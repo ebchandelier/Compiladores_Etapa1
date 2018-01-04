@@ -198,7 +198,7 @@ TAC *createArithmeticTAC(TACType type, TAC **newTAC){
 
 TAC *createCallTAC(TAC *id, TAC *arg){
 
-	return joinTAC(joinTAC(arg, id), createTAC(TAC_CALL, createLabel(), id->res, NULL));
+	return joinTAC(joinTAC(id, arg), createTAC(TAC_CALL, createLabel(), arg->res, NULL));
 }
 
 TAC *createPrintTAC(TAC *newTAC){
@@ -425,7 +425,7 @@ TAC *generateCode(AST *node){
 			break;
 
 		case AST_FUN_CAL:
-			result = createCallTAC(newTAC[0], newTAC[1]);
+			result = createCallTAC(newTAC[0], createTAC(TAC_LABEL, node->symbol, NULL, NULL));
 			break;
 
 		case RETURN_CMD:

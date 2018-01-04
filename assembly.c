@@ -40,6 +40,7 @@
 FILE* file;
 
 int functions_count = 0;
+int arg_count = 0;
 
 char* type_to_string(int type){
 	switch(type){
@@ -384,18 +385,81 @@ void generateAssembly_label(HashEntry* res)
 	fprintf(file,"\t\t\t%s:\n", res->key);
 }
 
-void generateAssembly_arg(HashEntry* source)
+void generateAssembly_parameters(HashEntry* source)
 {
-	char* sourceString = source->key;// rvalue(source);
+	char* sourceString = source->key;
 
-	fprintf(file,"\t\t# STARTING ARG\n");
+	fprintf(file,"\t\t# STARTING PARAM\n");
 	fprintf(file,"\t\t\tsubq	$8, %%rsp\n");
 	fprintf(file,"\t\t\tmovl %s, %%edx\n", sourceString);
-	fprintf(file,"\t\t\tmovl %%edx, (%%rsp)\n"/*, argCount * 8*/);
-	fprintf(file,"\t\t# ENDING ARG\n\n");
-
-	//free(sourceString);
+	fprintf(file,"\t\t\tmovl %%edx, (%%rsp)\n");
+	fprintf(file,"\t\t# ENDING PARAM\n\n");
 }
+
+void generateAssembly_arg(HashEntry* source){
+	char* arg = source->key;
+
+	fprintf(file, "\t\t# STARTING ARG\n");
+	fprintf(file, "\t\t\tmovl %d(%%rsp), %%edx\n", (arg_count + 2) * 8);
+	fprintf(file, "\t\t\tmovl %%edx, %s\n", arg);
+	fprintf(file, "\t\t# ENDING ARG\n\n");
+
+}
+
+void generateAssembly_ifz(HashEntry* test, HashEntry* dest){
+
+	fprintf(file, "\t\t# STARTING IFZ\n");
+	fprintf(file, "\t\t\tmovl %s, %%eax\n", test->key);
+	fprintf(file, "\t\t\ttestl %%eax, %%eax\n");
+	fprintf(file, "\t\t\tje %s\n", dest->key);
+	fprintf(file, "\t\t# ENDING IFZ\n\n");
+
+}
+void generateAssembly_jump(HashEntry* dest){
+
+	fprintf(file, "\t\t# STARTING JUMP\n");
+	fprintf(file, "\t\t\tjmp %s\n", dest->key);
+	fprintf(file, "\t\t# ENDING JUMP\n\n");
+
+}
+
+void generateAssembly_read(HashEntry* dst){
+
+	fprintf(file, "\t\t# STARTING READ\n");
+	fprintf(file, "\t\t\tmovl	$%s, %%esi\n", dst->key);
+	fprintf(file, "\t\t\tmovl	$.LC1, %%edi\n");
+	fprintf(file, "\t\t\tmovl	$0, %%eax\n");
+	fprintf(file, "\t\t\tcall	__isoc99_scanf\n");
+	fprintf(file, "\t\t# ENDING READ\n\n");
+
+}
+void generateAssembly_print(){
+
+}
+void generateAssembly_call(HashEntry* src, HashEntry* fn){
+
+	//FIX THIS
+
+	fprintf(file,"\t\t# STARTING CALL\n");
+	fprintf(file,"\t\t\tsubq	$%d, %%rsp\n", arg_count * 8);
+	fprintf(file,"\t\t\tcall	%s\n", src->key);
+	fprintf(file,"\t\t\tmovl	%%eax, %s\n", fn->key);
+	fprintf(file,"\t\t# ENDING CALL\n\n");
+
+}
+void generateAssembly_ret(HashEntry* res){
+
+	fprintf(file,"\t\t# STARTING RET\n");
+	fprintf(file,"\t\t\tmovl	%s, %%eax\n", res->key);
+	fprintf(file,"\t\t\tpopq	%%rbp\n");
+	fprintf(file,"\t\t\t.cfi_def_cfa 7, 8\n");
+	fprintf(file,"\t\t\tret\n");
+	fprintf(file,"\t\t\t.cfi_endproc\n");
+	fprintf(file,"\t\t# ENDING RET\n\n");
+
+}
+
+
 
 void generateAssemblyOf(TAC* tac)
 {
@@ -408,8 +472,8 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_ARRAYMOVE: 	generateAssembly_arrayMove(tac->res, tac->op1); break;
 		case TAC_BEGINFUN:		generateAssembly_begin_fun(tac->res); break;
 		case TAC_LABEL:			generateAssembly_label(tac->res); break;
-		case TAC_ARG:			generateAssembly_arg(tac->res); break;
-		case TAC_ENDFUN:		generateAssembly_end_fun(tac->res); break;	
+		case TAC_ARG:			generateAssembly_arg(tac->res); arg_count++; break;
+		case TAC_ENDFUN:		generateAssembly_end_fun(tac->res); arg_count = 0; break;	
 		case TAC_ARRAY_ACCESS: 	generateAssembly_arrayAccess(tac->res, tac->op1, tac->op2); break;
 		case TAC_LT:			generateAssembly_less(tac->res, tac->op1, tac->op2); break;
 		case TAC_LE: 			generateAssembly_less_equal(tac->res, tac->op1, tac->op2); break;
@@ -423,6 +487,14 @@ void generateAssemblyOf(TAC* tac)
 		case TAC_SUB: 			generateAssembly_sub(tac->res, tac->op1, tac->op2); break;
 		case TAC_MUL: 			generateAssembly_mul(tac->res, tac->op1, tac->op2); break;
 		case TAC_DIV: 			generateAssembly_div(tac->res, tac->op1, tac->op2); break;
+		case TAC_PARAM:			generateAssembly_parameters(tac->res); arg_count++; break;
+		case TAC_IFZ:			generateAssembly_ifz(tac->res, tac->op1); break;
+		case TAC_JUMP:			generateAssembly_jump(tac->res); break;
+		case TAC_READ:			generateAssembly_read(tac->res); break;
+		case TAC_PRINT:			generateAssembly_print(); break;
+		case TAC_CALL:			generateAssembly_call(tac->op1, tac->res); arg_count = 0; break;
+		case TAC_RET:			generateAssembly_ret(tac->op1); break;
+		case TAC_INV: 			//TO-DO
 		default:
 			done = 0;
 			fprintf(stderr, "->FAZER O %s\n", type_to_string(tac->type));
