@@ -2,6 +2,7 @@
 #include "assembly.h"
 
 extern FILE *yyin;
+int foundSyntaxError = 0;
 
 int WriteToFile(char* path, char* content)
 {
@@ -37,6 +38,10 @@ int main(int argc, char** argv) {
 	}
 
 	yyparse();
+
+	if(foundSyntaxError) {
+		exit(3);
+	}
 	
 	fclose(yyin);
 

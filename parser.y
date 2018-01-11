@@ -97,6 +97,7 @@ program:
 
 vardec:
 	TK_IDENTIFIER ':' type '=' value ';'	{$$ = astCreate(ASSIGNMENT, 0, astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), $3, $5, 0);}
+	| TK_IDENTIFIER ':' type '=' value		{ foundSyntaxError=1; fprintf(stderr, "ERRO: Falta pontuação ; na linha %d\n", lineCount); $$ = astCreate(ASSIGNMENT, 0, astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), $3, $5, 0); }
 	| TK_IDENTIFIER ':' type '[' LIT_INTEGER ']' valuelist ';' {$$ = astCreate(ASSIGNMENT_LIST, 
 																0, 
 																astCreate(AST_SYMBOL, $1, 0, 0, 0, 0), 
@@ -127,7 +128,8 @@ expr:
     ;
 
 at_array:
-	'[' expr ']'	{ $$ = astCreate(AST_AT_ARRAY, 0, $2, 0, 0, 0); }
+	'[' expr 	{ foundSyntaxError=1; fprintf(stderr, "ERRO: Faltando braket na linha %d\n",lineCount ); $$ = astCreate(AST_AT_ARRAY, 0, $2, 0, 0, 0); }
+	| '[' expr ']'	{ $$ = astCreate(AST_AT_ARRAY, 0, $2, 0, 0, 0); }
 	;
 
 funcall:
@@ -141,6 +143,7 @@ cmd:
 	| KW_PRINT printableList { $$ = astCreate(PRINT_CMD, 0, $2, 0, 0, 0); }
 	| KW_RETURN expr { $$ = astCreate(RETURN_CMD, 0, $2, 0, 0, 0); }
 	| KW_IF '(' expr ')' KW_THEN cmd elseCmd { $$ = astCreate(IF_THEN_ELSE_CMD, 0, $3, $6, $7, 0);}
+	| KW_IF '(' expr KW_THEN cmd elseCmd { foundSyntaxError=1; fprintf(stderr, "ERRO: Faltando parenteses na linha %d\n", lineCount); $$ = astCreate(IF_THEN_ELSE_CMD, 0, $3, $5, $6, 0);}
 	| KW_WHILE '(' expr ')' cmd { $$ = astCreate(WHILE_CMD, 0, $3, $5, 0, 0); }
     | cmdblock	{ $$ = $1; }
     |	{ fprintf(stderr, "VAZIU CMD\n"); $$ = 0; }

@@ -2,15 +2,20 @@
 
 a 3: short = 110;
 a 4 : float = 2.0;
-a1 : float = 0.0;
+
+//FALTANDO ;
+a1 : float = 0.0
 v: long[10] 10 20 30 40 50 60 70 80 90 100;
-aff : long = 2;
+
+//FALTANDO ;
+aff : long = 2
 
 (long) incn (x: long, n: long)
   {
     a1 = 2.0;
 
-    if (a1 < 50) then 
+    //FALTANDO )
+    if (a1 < 50 then 
     a1 = a1;
 
     a1 = a1 + 50;
@@ -19,7 +24,8 @@ aff : long = 2;
 
     aff = - aff;
 
-    v[2] = v[3];
+    //FALTADO ]
+    v[2] = v[3;
 
     a 3 = v[2];
 
